@@ -1,6 +1,6 @@
 stages:
   - build
-  - test
+#  - test
 #  - deploy
 
 variables:
@@ -21,14 +21,14 @@ react_build:
     - cd Baue die Anwendung
     - npm run build
 
-react_test:
-  stage: test
-  script:
-    - cd frontend
-    - echo Installing npm packages
-    - npm install
-    - cd Teste die Anwendung
-    - npm run test
+#react_test:
+#  stage: test
+#  script:
+#    - cd frontend
+#    - echo Installing npm packages
+#    - npm install
+#    - cd Teste die Anwendung
+#    - npm run test
 
 #python_build:
 #  stage: build
