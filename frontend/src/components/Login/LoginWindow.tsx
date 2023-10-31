@@ -1,8 +1,11 @@
 import React from 'react'
+import LoginCard from "./LoginCard";
 
 const LoginWindow = () => {
   return (
-    <div>LoginWindow</div>
+    <div>
+      <LoginCard></LoginCard>
+    </div>
   )
 }
 
