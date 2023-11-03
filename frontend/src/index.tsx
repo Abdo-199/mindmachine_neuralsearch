@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
+import LoginWindow from "./components/Login/LoginWindow";
+import "./GlobalStyles.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
     <div>
-      Hier erstes Element bitte!
+      <LoginWindow></LoginWindow>
     </div>
 );
 
