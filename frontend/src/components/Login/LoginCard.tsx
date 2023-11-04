@@ -1,7 +1,10 @@
-import "./LoginStyles.css";
+import "../../styles/Login/LoginStyles.css";
 import { useState } from "react";
 
 async function Login(username: string, password: string) {
+
+  //Weiterleitung zu MainWindow (erst einmal... später wird das geändert)
+  
   // create user object
   let data = { username: username, password: password };
 

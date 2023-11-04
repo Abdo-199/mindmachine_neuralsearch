@@ -1,0 +1,13 @@
+#header-container {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 100%;
+    height: 50px;
+    background-color: gray;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#header-container div p {
+    font-size: 1.4rem;
+}
