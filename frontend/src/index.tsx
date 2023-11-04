@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import LoginWindow from "./components/Login/LoginWindow";
-import "./GlobalStyles.css";
+import MainWindow from './components/Misc/MainWindow';
+import LoginWindow from './components/Login/LoginWindow';
+import "./styles/GlobalStyles.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
     <div>
-      <LoginWindow></LoginWindow>
+      <MainWindow></MainWindow>
     </div>
 );
 
