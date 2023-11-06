@@ -1,4 +1,4 @@
-import SearchHistoryPage from "./SearchHistoryPage";
+import SearchHistoryPage from "./SearchHistory";
 
 const SearchHistoryWindow = () => {
   return (
