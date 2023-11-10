@@ -1,8 +1,8 @@
 from fastapi import FastAPI, APIRouter
 from fileSystemHandler import FileSystemHandler
 from statisticsHandler import StatisticsHandler
-
-from typing import Union
+from ldap3 import Server, Connection
+from dataDefinitions import *
 
 class API:
 
@@ -14,22 +14,27 @@ class API:
         self.fs = FileSystemHandler("/")
 
         self.setup_routes()
-
-    def setup_routes(self):
-        # @self.router.get("/")
-        # async def read_root():
-        #     return {"Hello": "World"}
-
-        # @self.router.get("/items/{item_id}")
-        # async def read_item(item_id: int, q: Union[str, None] = None):
-        #     return {"item_id": item_id, "q": q}
-
         self.app.include_router(self.router)
 
+    def setup_routes(self):
+
         #validate HTW Credentials
-        @self.router.get("login/{username}/{password}")
-        async def validate_credentials(username, password):
-            return True
+        @self.router.post("/login")
+        async def validate_credentials(request: LoginModel):
+
+            ldap_server = Server('ldap://login-dc-01.login.htw-berlin.de')
+            base_dn = 'dc=login,dc=htw-berlin,dc=de'
+            username = f'cn={request.username},ou=idmusers,' + base_dn
+ 
+            conn = Connection(ldap_server, user=username, password=request.password, auto_bind=False)
+            conn.start_tls()
+
+            if conn.bind():
+                print("LDAP authentication successful")
+                return {"isAuthenticated": True, "isAdmin": True}
+          
+            print("LDAP authentication failed")
+            return {"isAuthenticated": False, "isAdmin": False}
         
         #search
         @self.router.get("/search/{query}")
