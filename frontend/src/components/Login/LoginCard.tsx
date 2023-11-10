@@ -11,38 +11,31 @@ const LoginCard = () => {
 
   const Login = async (username: string, password: string) =>  {
 
-    //Weiterleitung zu MainWindow (erst einmal... später wird das geändert)
-    navigate("/MainWindow")
-    
-    // create user object
-    let data = { username: username, password: password };
+    let bodyData = { username: username, password: password };
   
     let fetchData = {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify(bodyData),
       headers: {
         "Content-Type": "application/json",
       },
     };
   
-    const url = "http://localhost:5000/api/login";
+    const url = "http://localhost:8000/login";
     const response = await fetch(url, fetchData)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        let user = data;
-        console.log(user);
-        // check if user is authenticated (needs to be updated with the correct property)
-        if (!user.isAuthenticated) {
-          // push an error warning due to wrong credentials
+        if (!data.isAuthenticated) {
           alert("Error. Wrong Credentials");
         }
         else {
           localStorage.setItem("userID", username)
-          localStorage.setItem("isAdmin", user.isAdmin)
-          // TODO weiterleiten zu HomeWindow
-          
+          localStorage.setItem("isAdmin", data.isAdmin)
+
+          //Weiterleitung zu MainWindow
+          navigate("/MainWindow")
         }
       })
       .catch(function (error) {

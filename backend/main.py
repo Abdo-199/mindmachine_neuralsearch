@@ -1,10 +1,21 @@
 from qdrant import QDrant
 from api import API
+from fastapi.middleware.cors import CORSMiddleware
 
 db = QDrant()
 
 api = API(db)
 app = api.app
+
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 def main():
     pass
