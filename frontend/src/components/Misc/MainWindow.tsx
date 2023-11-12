@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import HomeWindow from '../Home/HomeWindow'
@@ -8,12 +8,21 @@ import SearchHistory from '../SearchHistory/SearchHistory';
 import SearchResult from '../SearchResult/SearchResult';
 import AdminPanel from '../AdminPanel/AdminPanel';
 import FileInformationWindow from '../FileInformation/FileInformationWindow'
+import { useNavigate } from "react-router-dom";
 
 interface MainWindowProps {
   content: string;
 }
 
 const MainWindow: React.FC<MainWindowProps> = ({ content }) => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("userID") == null || localStorage.getItem("isAdmin") == null) {
+      navigate("/")
+    }
+  }, [])
 
   //Prüfe, was angezeigt werden soll
   var toRenderContent;
