@@ -4,6 +4,7 @@ import SearchInput from "./SearchInput";
 import DocumentList from "./DocumentList";
 
 const HomeWindow = () => {
+
   // gegenwärtige datei zum Hinzufügen
   const [file, setFile] = useState<File>();
   // Liste aller Dateien (noch nicht user-spezifisch)
@@ -20,6 +21,7 @@ const HomeWindow = () => {
     }
     setDocRows(docRows)
   };
+  
   return (
     <div className="window-container">
       <SearchInput></SearchInput>
