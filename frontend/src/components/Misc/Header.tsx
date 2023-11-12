@@ -8,6 +8,13 @@ const Header = () => {
 
     const [isAdmin, setIsAdmin] = useState(true);
 
+    const LogOut = () => {
+        localStorage.removeItem("userID")
+        localStorage.removeItem("isAdmin")
+
+        navigate("/")
+    }
+
     return (
         <div id="header-container">
             <div className='header-button' onClick={() => navigate("/MainWindow")}>
@@ -23,7 +30,7 @@ const Header = () => {
             </div> }
 
             {/* TODO: LOGOUT */}
-            <div className='header-button'>
+            <div className='header-button' onClick={() => LogOut()}>
                 <p>Logout</p>
             </div>
         </div>
