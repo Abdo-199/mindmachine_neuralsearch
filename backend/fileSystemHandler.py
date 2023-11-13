@@ -6,7 +6,7 @@ class FileSystemHandler:
     def __init__(self):
         self.root_directory = config.root_directory
         self.file_extension = config.file_extension
-        self.user_directory
+        self.user_directory = ""
 
     def get_fs(self):
         pass
