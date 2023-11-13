@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import HomeWindow from '../Home/HomeWindow'
+
 import '../../styles/Misc/MainWindow.css'
 import LegalNotice from './LegalNotice';
 import SearchHistory from '../SearchHistory/SearchHistory';
