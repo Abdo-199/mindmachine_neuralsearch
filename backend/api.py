@@ -11,7 +11,7 @@ class API:
         self.db = dataBase
         self.router = APIRouter()
         self.stats = StatisticsHandler(self.db)
-        self.fs = FileSystemHandler("/")
+        self.fs = FileSystemHandler()
 
         self.setup_routes()
         self.app.include_router(self.router)
@@ -59,7 +59,7 @@ class API:
         #send file structure
         @self.router.get("/filestructure/{user_id}")
         async def get_file_structure(user_id):
-            return True
+            return FileSystemHandler.get_fs_for_user(user_id=user_id)
         
         #edit document name
         @self.router.put("/document/{document_id}")
