@@ -54,6 +54,7 @@ class API:
         #delete document
         @self.router.delete("/document/{document_id}")
         async def delete_document(document_id):
+            FileSystemHandler.delete_document(document_id=document_id)
             return True
         
         #send file structure
@@ -63,7 +64,8 @@ class API:
         
         #edit document name
         @self.router.put("/document/{document_id}")
-        async def edit_document_name(document_id):
+        async def edit_document_name(request: RenameFileModel):
+            FileSystemHandler.edit_document_name(request.old_name, request.new_name)
             return True
         
 
