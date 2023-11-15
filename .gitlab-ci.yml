@@ -11,7 +11,7 @@ react_build:
   script:
     - cd frontend
     - echo Installing npm packages
-    - npm install
+    - npm install --fetch-timeout=60000
     - echo Baue die Anwendung
     - npm run build
 
