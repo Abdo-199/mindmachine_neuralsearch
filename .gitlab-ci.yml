@@ -6,10 +6,6 @@ stages:
 #  - test
 #  - deploy
 
-before_script:
-  # Vor jedem Job auszuführende Befehle
-  - docker info
-
 react_build:
   stage: build
   script:
