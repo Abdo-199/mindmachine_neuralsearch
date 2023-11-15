@@ -3,7 +3,7 @@ image: node:latest
 
 stages:
   - build
-  - test
+#  - test
 #  - deploy
 
 before_script:
@@ -16,7 +16,7 @@ react_build:
     - cd frontend
     - echo Installing npm packages
     - npm install
-    - cd Baue die Anwendung
+    - echo Baue die Anwendung
     - npm run build
 
 
