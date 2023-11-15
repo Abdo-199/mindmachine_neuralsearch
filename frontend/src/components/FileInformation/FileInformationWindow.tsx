@@ -4,9 +4,19 @@ import { faFile } from "@fortawesome/free-solid-svg-icons";
 import FileOptions from "./FileOptions";
 import FileInfosCard from "./FileInfosCard";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
-const FileInformationWindow = () => {
-  const [filename, SetFilename] = useState("MeinDokument");
+const FileInformationWindow = ({
+  docRows,
+  SetDocRows,
+}: {
+  docRows: any[];
+  SetDocRows: any;
+}) => {
+  
+  const { filenameA } = useParams() as { filenameA: string };
+
+  const [filename, SetFilename] = useState<string>(filenameA);
 
   return (
     <>
@@ -19,6 +29,8 @@ const FileInformationWindow = () => {
           <FileOptions
             filename={filename}
             SetFilename={SetFilename}
+            docRows={docRows}
+            SetDocRows={SetDocRows}
           ></FileOptions>
         </div>
       </div>

@@ -1,16 +1,19 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/FileInformation/FileInformation.css";
 import Modal from "../Others/Modal";
 
 const FileOptions = ({
   filename,
   SetFilename,
+  docRows,
+  SetDocRows,
 }: {
   filename: string;
   SetFilename: any;
+  docRows: any[];
+  SetDocRows: any;
 }) => {
-
   const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
   const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
 
@@ -25,25 +28,47 @@ const FileOptions = ({
   };
 
   const [newFilename, SetNewFilename] = useState("");
+
   const navigate = useNavigate();
 
   const RenameFile = () => {
     if (newFilename != "") {
       SetFilename(newFilename);
+      // clear input value
       SetNewFilename("");
+
+      const nextList = docRows.map((item) => {
+        if (item.name === filename) {
+          item.name = newFilename;
+          return item;
+        } else {
+          return item;
+        }
+      });
+
+      SetDocRows(nextList);
       console.log(`File "${filename}" is renamed to "${newFilename}".`);
+      // close Modal Window
       ModalHandlerDataChange();
     }
   };
 
   const DeleteFile = () => {
-    // gehe DocRows durch und gucke, ob der filename == docRows[i].filename ist
-    // delete the file
-    // ...
-    console.log(`File "${filename}" is deleted.`);
-    // navigate back to Home Page
-    navigate("/MainWindow")
+    // finde file
+    const fileFound = docRows.find((file) => file.name == filename);
+
+    if (fileFound) {
+      console.log("file was found");
+      // delete the file
+      SetDocRows(docRows.filter((file) => file.name !== filename));
+      console.log(`File "${filename}" is deleted.`);
+    } else {
+      alert("Error. There was a problem.");
+    }
+    // close Modal Window
     ModalHandlerDataDelete();
+    // navigate back to Home Page
+    navigate("/MainWindow");
   };
 
   return (
