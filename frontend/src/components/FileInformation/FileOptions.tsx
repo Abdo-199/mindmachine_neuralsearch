@@ -4,20 +4,26 @@ import "../../styles/FileInformation/FileInformation.css";
 import Modal from "../Others/Modal";
 
 const FileOptions = ({
-  modalHandlerDataChange,
-  ModalHandlerDataChange,
-  modalHandlerDataDelete,
-  ModalHandlerDataDelete,
   filename,
   SetFilename,
 }: {
-  modalHandlerDataChange: boolean;
-  ModalHandlerDataChange: any;
-  modalHandlerDataDelete: boolean;
-  ModalHandlerDataDelete: any;
   filename: string;
   SetFilename: any;
 }) => {
+
+  const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
+  const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
+
+  const ModalHandlerDataChange = () => {
+    // Modalhandler zum Ändern des Dateinamens
+    setModalHandlerDataChange((current) => !current);
+  };
+
+  const ModalHandlerDataDelete = () => {
+    // Modalhandler zum Löschen der Datei
+    setModalHandlerDataDelete((current) => !current);
+  };
+
   const [newFilename, SetNewFilename] = useState("");
   const navigate = useNavigate();
 
@@ -31,6 +37,7 @@ const FileOptions = ({
   };
 
   const DeleteFile = () => {
+    // gehe DocRows durch und gucke, ob der filename == docRows[i].filename ist
     // delete the file
     // ...
     console.log(`File "${filename}" is deleted.`);
