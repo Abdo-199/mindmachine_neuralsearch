@@ -1,27 +1,41 @@
-image: "node:latest"
+# Definiere das Docker-Image für den GitLab Runner
+image: docker:latest
 
 stages:
   - build
-#  - test
-#  - deploy
+  - test
 
-variables:
-  CI_NODE_INDEX: "1" 
+before_script:
+  # Vor jedem Job auszuführende Befehle
+  - docker info
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - frontend/node_modules/
-    - backend/.venv/  
 
-react_build:
-  stage: build
-  script:
-    - cd frontend
-    - echo Installing npm packages
-    - npm install
-    - cd Baue die Anwendung
-    - npm run build
+
+
+# image: "node:latest"
+
+# stages:
+#   - build
+# #  - test
+# #  - deploy
+
+# variables:
+#   CI_NODE_INDEX: "1" 
+
+# cache:
+#   key: ${CI_COMMIT_REF_SLUG}
+#   paths:
+#     - frontend/node_modules/
+#     - backend/.venv/  
+
+# react_build:
+#   stage: build
+#   script:
+#     - cd frontend
+#     - echo Installing npm packages
+#     - npm install
+#     - cd Baue die Anwendung
+#     - npm run build
 
 #react_test:
 #  stage: test
