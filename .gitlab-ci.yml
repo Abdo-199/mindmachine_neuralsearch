@@ -1,5 +1,5 @@
 # Definiere das Docker-Image für den GitLab Runner
-image: docker:latest
+image: node:latest
 
 stages:
   - build
