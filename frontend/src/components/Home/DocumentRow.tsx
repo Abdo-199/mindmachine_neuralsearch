@@ -12,7 +12,7 @@ const DocumentRow = ({file}: {file: any}) => {
       <td>{date}</td>
       <td>
         {/* weiterleiten zur File Information Page der jeweiligen Datei*/}
-        <Link to={"/"}>details</Link>
+        <Link to={"/FileInformation"}>details</Link>
       </td>
     </tr>
   );
