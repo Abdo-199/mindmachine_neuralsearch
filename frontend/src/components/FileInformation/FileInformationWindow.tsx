@@ -8,10 +8,16 @@ import { useState } from "react";
 const FileInformationWindow = () => {
   const [filename, SetFilename] = useState("MeinDokument");
   const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
+  const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
 
   const ModalHandlerDataChange = () => {
-    // Modalhanlder zum Öffnen/Schließen der Diagrammeinstellungen
+    // Modalhandler zum Ändern des Dateinamens
     setModalHandlerDataChange((current) => !current);
+  };
+
+  const ModalHandlerDataDelete = () => {
+    // Modalhandler zum Löschen der Datei
+    setModalHandlerDataDelete((current) => !current);
   };
 
   return (
@@ -25,6 +31,8 @@ const FileInformationWindow = () => {
           <FileOptions
             modalHandlerDataChange={modalHandlerDataChange}
             ModalHandlerDataChange={ModalHandlerDataChange}
+            modalHandlerDataDelete={modalHandlerDataDelete}
+            ModalHandlerDataDelete={ModalHandlerDataDelete}
             filename={filename}
             SetFilename={SetFilename}
           ></FileOptions>
