@@ -4,20 +4,21 @@ image: docker:latest
 stages:
   - build
   - test
+#  - deploy
 
 before_script:
   # Vor jedem Job auszuführende Befehle
   - docker info
 
+react_build:
+  stage: build
+  script:
+    - cd frontend
+    - echo Installing npm packages
+    - npm install
+    - cd Baue die Anwendung
+    - npm run build
 
-
-
-# image: "node:latest"
-
-# stages:
-#   - build
-# #  - test
-# #  - deploy
 
 # variables:
 #   CI_NODE_INDEX: "1" 
