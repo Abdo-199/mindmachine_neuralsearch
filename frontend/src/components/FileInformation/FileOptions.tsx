@@ -88,8 +88,9 @@ const FileOptions = ({
                 <span>
                   New Filename:{" "}
                   <input
-                    onChange={(e) => SetNewFilename(e.target.value)}
-                  ></input>
+                    onChange={(e) => SetNewFilename(e.target.value + ".pdf")}
+                  ></input>{" "}
+                  .pdf
                 </span>
               </div>
               <br></br>
