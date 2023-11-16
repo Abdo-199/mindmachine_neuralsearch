@@ -25,47 +25,8 @@ backend_build:
   image: python:latest
   script:
     - cd backend
-    #- python -m pip install --upgrade pip
     - pip install -r requirements.txt
 
-# variables:
-#   CI_NODE_INDEX: "1" 
-
-# cache:
-#   key: ${CI_COMMIT_REF_SLUG}
-#   paths:
-#     - frontend/node_modules/
-#     - backend/.venv/  
-
-# react_build:
-#   stage: build
-#   script:
-#     - cd frontend
-#     - echo Installing npm packages
-#     - npm install
-#     - cd Baue die Anwendung
-#     - npm run build
-
-#react_test:
-#  stage: test
-#  script:
-#    - cd frontend
-#    - echo Installing npm packages
-#    - npm install
-#    - cd Teste die Anwendung
-#    - npm run test
-
-#python_build:
-#  stage: build
-#  script:
-#   - cd backend
-#    - pip install -r requirements.txt
-
-#python_test:
-#  stage: test
-#  script:
-#    - cd backend
-#   - pip install -r requirements.txt
 
 #deploy:
 #  stage: deploy
