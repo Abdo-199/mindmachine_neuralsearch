@@ -40,7 +40,7 @@ cache:
 
 docker_build:
   stage: build
-  image: docker:latest
+  image: docker::19.03.12
   variables:
   #   DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
