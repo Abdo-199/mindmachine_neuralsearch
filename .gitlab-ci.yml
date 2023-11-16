@@ -73,7 +73,8 @@ deploy_staging:
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - ssh mindmachine@141.45.224.114 "cd /home/mindmachine/mindmachine && git checkout master && git pull origin master && exit"
+    - ssh mindmachine@141.45.224.114 "ls" 
+    #cd /home/mindmachine/mindmachine && git checkout master && git pull origin master && exit"
 
 
 
