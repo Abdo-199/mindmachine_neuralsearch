@@ -2,29 +2,38 @@
 
 stages:
   - build
-#  - test
+  - test
 #  - deploy
 cache:
   paths:
     - frontend/node_modules/
-
-
+    - backend/.venv/ 
 
 react_build:
   stage: build
   image: node:latest
   script:
     - cd frontend
-    - echo Installing npm packages
+    - echo Installiere npm-packages
     - npm install 
-    - echo Baue die Anwendung
+    - echo Baue das Frontend
     - CI=false npm run build
+
+react_test:
+ stage: test
+ script:
+   - cd frontend
+   - echo Installiere npm-packages
+   - npm install
+   - echo Teste das Frontend
+   - CI=false npm run test
 
 backend_build:
   stage: build
   image: python:latest
   script:
     - cd backend
+    - echo Baue das Backend
     - pip install -r requirements.txt
 
 
