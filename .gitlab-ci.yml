@@ -1,83 +1,24 @@
-name: Node.js and Python CI
-image: ubuntu:latest
+# Definiere das Docker-Image für den GitLab Runner
+image: node:latest
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: latest # Define your Node version here
-        python-version: latest # Define your Python version here
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Install Node.js dependencies
-      run: |
-        cd path/to/frontend  # Replace with your frontend directory
-        npm install
-
-    - name: Build frontend
-      run: |
-        cd /frontend  # Replace with your frontend directory
-        npm run build  # Replace with your frontend build command
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install Python dependencies
-      run: |
-        cd /backend  # Replace with your backend directory
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Test backend
-      run: |
-        cd /backend  # Replace with your backend directory
-        echo would run backend test now  # Replace with your backend test command
+stages:
+  - build
+#  - test
+#  - deploy
+cache:
+  paths:
+    - frontend/node_modules/
 
 
 
-
-
-
-
-
-
-
-
-
-
-# # Definiere das Docker-Image für den GitLab Runner
-# image: node:latest
-
-# stages:
-#   - build
-# #  - test
-# #  - deploy
-
-# react_build:
-#   stage: build
-#   script:
-#     - cd frontend
-#     - echo Installing npm packages
-#     - npm install --fetch-timeout=60000
-#     - echo Baue die Anwendung
-#     - npm run build
+react_build:
+  stage: build
+  script:
+    - cd frontend
+    - echo Installing npm packages
+    - npm install --fetch-timeout=60000
+    - echo Baue die Anwendung
+    - npm run build
 
 
 # variables:
