@@ -52,7 +52,7 @@ deploy_Production:
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - ssh mindmachine@141.45.224.114 "cd ./mindmachine/ && git checkout main && git pull origin main && docker-compose down && docker-compose up -d && exit"
+    - ssh mindmachine@141.45.224.114 "cd ./mindmachine/ && git reset --hard HEAD && git clean -f -d && git pull  && docker-compose down && docker-compose up -d && exit"
   only:
     - main
 
