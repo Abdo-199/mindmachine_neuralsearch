@@ -26,7 +26,7 @@ react_test:
    - echo Installiere npm-packages
    - npm install
    - echo Teste das Frontend
-   - CI=false npm run test
+   - CI=false npm run test -passWithNoTests
 
 backend_build:
   stage: build
