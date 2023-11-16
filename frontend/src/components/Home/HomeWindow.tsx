@@ -3,23 +3,25 @@ import "../../styles/Home/Home.css";
 import SearchInput from "./SearchInput";
 import DocumentList from "./DocumentList";
 
-const HomeWindow = () => {
+const HomeWindow = ({docRows, SetDocRows}: {docRows: any[], SetDocRows: any}) => {
 
   // gegenwärtige datei zum Hinzufügen
-  const [file, setFile] = useState<File>();
-  // Liste aller Dateien (noch nicht user-spezifisch)
-  const [docRows, setDocRows] = useState<File[]>([]);
+  const [file, setFile] = useState<any>();
 
   const selectFiles = (event: any) => {
     for (let i = 0; i < event.target.files.length; i++) {
-      const file: File = event.target.files[i];
+      const rawFile: File = event.target.files[i];
+      // nehme heutiges Datum für Upload-Date
+      const today = new Date().toLocaleDateString();
+      const file = {name: rawFile.name, size: rawFile.size, date: today}
+
       // keine Dateien mit doppeltem Namen hochladen 
       if (!docRows.find((x) => x.name == file.name)) {
         setFile(file);
         docRows.push(file);
       }
     }
-    setDocRows(docRows)
+    SetDocRows(docRows)
   };
   
   return (
