@@ -38,7 +38,20 @@ class FileSystemHandler:
         pass
 
     def delete_document(self, document_id):
-        pass
+         # Check if the current file exists
+        if os.path.exists(self.user_directory + document_id):
+             # Remove the file
+            os.remove(self.user_directory + document_id)
+
+    def edit_document_name(self, old_name, new_name):
+    
+        old_file_full_path = self.user_directory + old_name
+        new_file_full_path = self.user_directory + new_name
+
+        # Check if the current file exists
+        if os.path.exists(old_file_full_path):
+        # Rename the file
+            os.rename(old_file_full_path, new_file_full_path)
 
     def get_document(self, document_id):
         pass
