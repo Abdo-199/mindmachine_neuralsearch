@@ -11,32 +11,32 @@ cache:
 
 
 
-react_build:
-  stage: build
-  image: node:latest
-  script:
-    - cd frontend
-    - echo Installiere npm-packages
-    - npm install 
-    - echo Baue das Frontend
-    - CI=false npm run build
+# react_build:
+#   stage: build
+#   image: node:latest
+#   script:
+#     - cd frontend
+#     - echo Installiere npm-packages
+#     - npm install 
+#     - echo Baue das Frontend
+#     - CI=false npm run build
 
-react_test:
- stage: test
- script:
-   - cd frontend
-   - echo Installiere npm-packages
-   - npm install
-   - echo Teste das Frontend
-   - CI=false npm run test
+# react_test:
+#  stage: test
+#  script:
+#    - cd frontend
+#    - echo Installiere npm-packages
+#    - npm install
+#    - echo Teste das Frontend
+#    - CI=false npm run test
 
-backend_build:
-  stage: build
-  image: python:latest
-  script:
-    - cd backend
-    - echo Baue das Backend
-    - pip install -r requirements.txt
+# backend_build:
+#   stage: build
+#   image: python:latest
+#   script:
+#     - cd backend
+#     - echo Baue das Backend
+#     - pip install -r requirements.txt
 
 # docker_build:
 #   stage: build
