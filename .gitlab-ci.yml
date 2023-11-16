@@ -41,7 +41,7 @@ cache:
 
 docker_build:
   stage: build
-  image: docker:stable 
+  image: docker:latest
   script:
     - cd ./
     - echo building docker compose
