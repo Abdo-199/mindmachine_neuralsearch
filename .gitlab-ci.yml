@@ -1,49 +1,69 @@
+# Definiere das Docker-Image für den GitLab Runner
+
 stages:
   - build
-#  - test
+  - test
 #  - deploy
-
-variables:
-  CI_NODE_INDEX: "1" 
-
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - frontend/node_modules/
-    - backend/.venv/  
+    - backend/.venv/ 
 
-react_build:
-  stage: build
-  script:
-    - cd frontend
-    - echo Installing npm packages
-    - npm install
-    - cd Baue die Anwendung
-    - npm run build
 
-#react_test:
+
+# react_build:
+#   stage: build
+#   image: node:latest
+#   script:
+#     - cd frontend
+#     - echo Installiere npm-packages
+#     - npm install 
+#     - echo Baue das Frontend
+#     - CI=false npm run build
+
+# react_test:
 #  stage: test
 #  script:
 #    - cd frontend
-#    - echo Installing npm packages
+#    - echo Installiere npm-packages
 #    - npm install
-#    - cd Teste die Anwendung
-#    - npm run test
+#    - echo Teste das Frontend
+#    - CI=false npm run test
 
-#python_build:
-#  stage: build
-#  script:
-#   - cd backend
-#    - pip install -r requirements.txt
+# backend_build:
+#   stage: build
+#   image: python:latest
+#   script:
+#     - cd backend
+#     - echo Baue das Backend
+#     - pip install -r requirements.txt
 
-#python_test:
-#  stage: test
-#  script:
-#    - cd backend
-#   - pip install -r requirements.txt
-
-#deploy:
-#  stage: deploy
-#  script:
-#   - echo "Deploying..."
+docker_build:
+  stage: build
+  image: docker:stable
+  variables:
+  #   DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_COMPOSE_VERSION: '1.29.2'
+  before_script:
+    - apk add --no-cache docker-compose
+    #- docker info
+  script:
+    - cd ./
+    - echo building docker compose
+    - docker-compose build
+    - echo pushing docker compose
+    - docker-compose push
+  only:
+    - main
+# deploy:
+#   stage: deploy
+#   script:
+#     - apk add --no-cache openssh-client sshpass
+#     - sshpass -p "$DEPLOY_SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no $DEPLOY_SERVER_USER@$DEPLOY_SERVER_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+#     - sshpass -p "$DEPLOY_SERVER_PASSWORD" scp ./docker-compose.yml $DEPLOY_SERVER_USER@$DEPLOY_SERVER_IP:/path/to/deploy
+#     - sshpass -p "$DEPLOY_SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no $DEPLOY_SERVER_USER@$DEPLOY_SERVER_IP "cd /path/to/deploy && docker-compose pull && docker-compose up -d"
+#   only:
+#     - main
 
