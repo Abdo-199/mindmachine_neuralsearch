@@ -73,7 +73,7 @@ deploy_staging:
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - ssh mindmachine@141.45.224.114 "cd ./mindmachine/ && git checkout main && git pull origin main && exit"
+    - ssh mindmachine@141.45.224.114 "cd ./mindmachine/ && git checkout main && git pull origin main && docker-compose down && docker-compose up exit"
 
 
 
