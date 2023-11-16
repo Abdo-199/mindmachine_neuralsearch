@@ -60,6 +60,7 @@ cache:
 #   only:
 #     - main
 deploy:
+  image: docker:latest
   stage: deploy
   script:
     - apk add --no-cache openssh-client sshpass
