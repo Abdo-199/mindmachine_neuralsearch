@@ -43,6 +43,7 @@ docker_build:
   stage: build
   image: docker:stable 
   script:
+    -cd mindmachine
     - echo building docker compose
     - docker-compose build
     - echo pushing docker compose
