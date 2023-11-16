@@ -1,5 +1,4 @@
 # Definiere das Docker-Image für den GitLab Runner
-image: ubuntu:latest
 
 stages:
   - build
@@ -13,6 +12,7 @@ cache:
 
 react_build:
   stage: build
+  image: node:latest
   script:
     - cd frontend
     - echo Installing npm packages
@@ -22,6 +22,7 @@ react_build:
 
 backend_build:
   stage: build
+  image: python:latest
   script:
     - cd backend
     #- python -m pip install --upgrade pip
