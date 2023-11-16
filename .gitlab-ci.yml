@@ -24,7 +24,7 @@ backend_build:
   stage: build
   script:
     - cd backend
-    - python -m pip install --upgrade pip
+    #- python -m pip install --upgrade pip
     - pip install -r requirements.txt
 
 # variables:
