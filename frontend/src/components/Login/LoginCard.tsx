@@ -21,7 +21,7 @@ const LoginCard = () => {
       },
     };
   
-    const url = "http://localhost:8000/login";
+    const url = "http://141.45.224.114:8000/login";
     const response = await fetch(url, fetchData)
       .then((response) => {
         return response.json();
