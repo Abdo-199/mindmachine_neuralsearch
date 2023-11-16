@@ -41,7 +41,7 @@ cache:
 
 docker_build:
   stage: build
-  image: docker:stable privileged = true
+  image: docker:stable 
   script:
     - echo building docker compose
     - docker-compose build
