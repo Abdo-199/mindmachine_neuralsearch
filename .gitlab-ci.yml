@@ -41,7 +41,7 @@ backend_build:
 
 docker_build:
   stage: build
-  image: ubuntu:latest
+  image: docker:latest
   script:
     - echo building docker compose
     - docker-compose build
