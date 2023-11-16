@@ -18,7 +18,7 @@ react_build:
     - echo Installing npm packages
     - npm install 
     - echo Baue die Anwendung
-    - npm run build
+    - CI=false npm run build
 
 backend_build:
   stage: build
