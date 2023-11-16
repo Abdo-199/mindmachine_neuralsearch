@@ -36,6 +36,14 @@ backend_build:
     - echo Baue das Backend
     - pip install -r requirements.txt
 
+python_test:
+  stage: test
+  script:
+    - cd backend
+    - echo Teste das Backend
+    # - pip3 install -r requirements.txt  
+    # - python3 -m unittest discover -s your_tests_directory -p '*_test.py'
+
 
 #deploy:
 #  stage: deploy
