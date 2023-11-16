@@ -9,7 +9,11 @@ cache:
     - frontend/node_modules/
     - backend/.venv/ 
 
-
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_COMPOSE_VERSION: '1.29.2'
 
 # react_build:
 #   stage: build
@@ -40,7 +44,7 @@ cache:
 
 docker_build:
   stage: build
-  image: docker:stable
+  image: docker:19.03.12
 
   script:
     - cd ./
