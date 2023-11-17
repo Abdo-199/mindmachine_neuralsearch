@@ -20,7 +20,7 @@ class API:
 
         #validate HTW Credentials
         @self.router.post("/login")
-        async def validate_credentials(request: LoginModel):
+        async def validate_credentials(request: LoginRequestModel) -> LoginResponseModel:
 
             ldap_server = Server('ldap://login-dc-01.login.htw-berlin.de')
             base_dn = 'dc=login,dc=htw-berlin,dc=de'
@@ -31,10 +31,10 @@ class API:
 
             if conn.bind():
                 print("LDAP authentication successful")
-                return {"isAuthenticated": True, "isAdmin": True}
+                return LoginResponseModel(isAuthenticated=True, isAdmin=True)
           
             print("LDAP authentication failed")
-            return {"isAuthenticated": False, "isAdmin": False}
+            return LoginResponseModel(isAuthenticated=False, isAdmin=False)
         
         #search
         @self.router.get("/search/{query}")
