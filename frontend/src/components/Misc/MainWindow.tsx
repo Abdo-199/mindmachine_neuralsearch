@@ -15,6 +15,7 @@ interface MainWindowProps {
   content: string;
 }
 
+
 const MainWindow: React.FC<MainWindowProps> = ({ content }) => {
   const navigate = useNavigate();
 
@@ -30,38 +31,16 @@ const MainWindow: React.FC<MainWindowProps> = ({ content }) => {
     }
   }, []);
 
-  //Prüfe, was angezeigt werden soll
-  var toRenderContent;
-
-  switch (content) {
-    case "HomeWindow":
-      toRenderContent = (
-        <HomeWindow docRows={docRows} SetDocRows={SetDocRows}></HomeWindow>
-      );
-      break;
-    case "LegalNotice":
-      toRenderContent = <LegalNotice></LegalNotice>;
-      break;
-    case "SearchHistory":
-      toRenderContent = <SearchHistory></SearchHistory>;
-      break;
-    case "SearchResult":
-      toRenderContent = <SearchResult></SearchResult>;
-      break;
-    case "AdminPanel":
-      toRenderContent = <AdminPanel></AdminPanel>;
-      break;
-    case "FileInformation":
-      toRenderContent = (
-        <FileInformationWindow
-          docRows={docRows}
-          SetDocRows={SetDocRows}
-        ></FileInformationWindow>
-      );
-      break;
-    default:
-      break;
-  }
+  const componentMap: { [key: string]: React.ReactElement } = {
+    "HomeWindow": <HomeWindow docRows={docRows} SetDocRows={SetDocRows} />,
+    "LegalNotice": <LegalNotice />,
+    "SearchHistory": <SearchHistory/>,
+    "SearchResult": <SearchResult/>,
+    "AdminPanel": <AdminPanel/>,
+    "FileInformation": <FileInformationWindow docRows={docRows} SetDocRows={SetDocRows}/> ,
+  };
+  
+  const toRenderContent = componentMap[content]  || <div>Component not found</div>;
 
   return (
     <div id="windowWrapper">
