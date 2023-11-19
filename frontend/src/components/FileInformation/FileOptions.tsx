@@ -14,6 +14,7 @@ const FileOptions = ({
   docRows: any[];
   SetDocRows: any;
 }) => {
+
   const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
   const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
 
@@ -33,23 +34,9 @@ const FileOptions = ({
 
   const RenameFile = () => {
     if (newFilename != "") {
+      API_EditDocumentName();
       SetFilename(newFilename);
-      // clear input value
       SetNewFilename("");
-
-      const nextList = docRows.map((item) => {
-        if (item.name === filename) {
-          item.name = newFilename;
-          return item;
-        } else {
-          return item;
-        }
-      });
-
-      SetDocRows(nextList);
-      console.log(`File "${filename}" is renamed to "${newFilename}".`);
-      // close Modal Window
-      ModalHandlerDataChange();
     }
   };
 
@@ -58,18 +45,46 @@ const FileOptions = ({
     const fileFound = docRows.find((file) => file.name == filename);
 
     if (fileFound) {
-      console.log("file was found");
-      // delete the file
-      SetDocRows(docRows.filter((file) => file.name !== filename));
-      console.log(`File "${filename}" is deleted.`);
+      API_DeleteDocument();
     } else {
       alert("Error. There was a problem.");
     }
-    // close Modal Window
-    ModalHandlerDataDelete();
-    // navigate back to Home Page
-    navigate("/MainWindow");
   };
+
+  const API_DeleteDocument = async () => {
+    return await fetch(`${process.env.backendAddress}/deleteDocument/${localStorage.getItem("userID")}/${filename}`, {
+      method: 'GET'
+    })
+      .then(res => res.json())
+      .then(response => {
+        SetDocRows(docRows.filter((file) => file.name !== filename));
+        console.log(`File "${filename}" is deleted.`);
+
+        ModalHandlerDataDelete();
+        navigate("/MainWindow");
+      })
+  }
+
+  const API_EditDocumentName = async () => {
+    return await fetch(`${process.env.backendAddress}/editDocumentName/${localStorage.getItem("userID")}`, {
+      method: 'GET',
+      body: JSON.stringify({ "old_name": filename, "new_name": newFilename })
+    })
+      .then(res => res.json())
+      .then(response => {
+        const nextList = docRows.map((item) => {
+          if (item.name === filename) {
+            item.name = newFilename;
+            return item;
+          } else {
+            return item;
+          }
+        });
+  
+        SetDocRows(nextList);
+        ModalHandlerDataChange();
+      })
+  }
 
   return (
     <>
