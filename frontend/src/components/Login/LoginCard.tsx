@@ -1,3 +1,4 @@
+import { configDotenv } from "dotenv";
 import "../../styles/Login/LoginStyles.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +19,9 @@ const LoginCard = () => {
         "Content-Type": "application/json",
       },
     };
-
-    const url = "http://localhost:8000/login";
+    
+    //${process.env.backend_address}/login
+    const url = `http://localhost:8000/login`;
     const response = await fetch(url, fetchData)
       .then((response) => {
         return response.json();

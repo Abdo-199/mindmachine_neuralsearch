@@ -23,24 +23,37 @@ const MainWindow: React.FC<MainWindowProps> = ({ content }) => {
   const [docRows, SetDocRows] = useState<any[]>([]);
 
   useEffect(() => {
-    if (
-      localStorage.getItem("userID") == null ||
-      localStorage.getItem("isAdmin") == null
-    ) {
+    if (localStorage.getItem("userID") == null || localStorage.getItem("isAdmin") == null) {
       navigate("/");
     }
+    else {
+      GetFileStructure();
+    }
   }, []);
+
+  const GetFileStructure = async () => {
+    return await fetch(`http://localhost:8000/filestructure/${localStorage.getItem("userID")}`, {
+      method: 'GET',
+      mode: "cors",
+      cache: "no-cache",
+    })
+      .then(res => res.json())
+      .then(response => {
+        console.log(response)
+        SetDocRows(response)
+      })
+  }
 
   const componentMap: { [key: string]: React.ReactElement } = {
     "HomeWindow": <HomeWindow docRows={docRows} SetDocRows={SetDocRows} />,
     "LegalNotice": <LegalNotice />,
-    "SearchHistory": <SearchHistory/>,
-    "SearchResult": <SearchResult/>,
-    "AdminPanel": <AdminPanel/>,
-    "FileInformation": <FileInformationWindow docRows={docRows} SetDocRows={SetDocRows}/> ,
+    "SearchHistory": <SearchHistory />,
+    "SearchResult": <SearchResult />,
+    "AdminPanel": <AdminPanel />,
+    "FileInformation": <FileInformationWindow docRows={docRows} SetDocRows={SetDocRows} />,
   };
-  
-  const toRenderContent = componentMap[content]  || <div>Component not found</div>;
+
+  const toRenderContent = componentMap[content] || <div>Component not found</div>;
 
   return (
     <div id="windowWrapper">

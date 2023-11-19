@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, File, UploadFile, Form
 from fileSystemHandler import FileSystemHandler
 from statisticsHandler import StatisticsHandler
 from ldap3 import Server, Connection
@@ -43,7 +43,8 @@ class API:
         
         #upload document for user id
         @self.router.post("/upload/{user_id}")
-        async def upload_document(user_id):
+        async def upload_document(user_id, files: list[UploadFile] = File(...)):
+            FileSystemHandler.upload(self.fs, user_id, files)
             return True
 
         #get document
@@ -52,20 +53,20 @@ class API:
             return True
 
         #delete document
-        @self.router.delete("/document/{document_id}")
-        async def delete_document(document_id):
-            FileSystemHandler.delete_document(document_id=document_id)
+        @self.router.delete("/deleteDocument/{user_id}/{document_id}")
+        async def delete_document(user_id, document_id):
+            FileSystemHandler.delete_document(user_id, document_id=document_id)
             return True
         
         #send file structure
         @self.router.get("/filestructure/{user_id}")
         async def get_file_structure(user_id):
-            return FileSystemHandler.get_fs_for_user(user_id=user_id)
+            return FileSystemHandler.get_fs_for_user(self.fs, user_id)
         
         #edit document name
-        @self.router.put("/document/{document_id}")
-        async def edit_document_name(request: RenameFileModel):
-            FileSystemHandler.edit_document_name(request.old_name, request.new_name)
+        @self.router.put("/editDocumentName/{user_id}")
+        async def edit_document_name(user_id, request: RenameFileModel):
+            FileSystemHandler.edit_document_name(user_id, request.old_name, request.new_name)
             return True
         
 

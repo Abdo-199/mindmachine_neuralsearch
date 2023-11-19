@@ -7,12 +7,12 @@ const DocumentRow = ({file}: {file: any}) => {
   const size = (file.size/(1024*1024)).toFixed(2)
   return (
     <tr>
-      <td>{file.name}</td>
-      <td>{size} MB</td>
-      <td>{file.date}</td>
+      <td>{file.file_name}</td>
+      <td>{file.file_size.toFixed(2)} MB</td>
+      <td>{file.file_date}</td>
       <td>
         {/* weiterleiten zur File Information Page der jeweiligen Datei*/}
-        <Link to={`/FileInformation/${file.name}`}>details</Link>
+        <Link to={`/FileInformation/${file.name}`}>Details</Link>
       </td>
     </tr>
   );
