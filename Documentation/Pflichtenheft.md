@@ -25,11 +25,11 @@ Im Rahmen eines kollaborativen Kundenworkshops wurde ein umfassendes Story Mappi
 
 Das Story Mapping ergab eine klare Strukturierung der Anforderungen in mehrere Epics, die jeweils einen größeren funktionalen Bereich der Anwendung repräsentieren. Die wichtigsten Epics und ihre zugehörigen User Stories sind:
 
-**Epic 1: Benutzeranmeldung und Authentifizierung**
+**[Epic 1: Benutzeranmeldung und Authentifizierung](###Epic1:(Website-Zugriff)Benutzeranmeldung undAuthentifizierung)**
 
 - [User Story 1.1: Website öffnen als Anwender (HTW-Anwender und Admin)](####UserStory1.1:WebsiteöffnenalsAnwender(HTW-AnwenderundAdmin))
-- User Story 1.2: Log-In für HTW-Anwender
-- User Story 1.3: Log-Out-Funktionalität
+- [User Story 1.2: Log-In für HTW-Anwender](####UserStory1.2:Log-InfürHTW-Anwender)
+- [User Story 1.3: Log-Out-Funktionalität](####UserStory1.3:Log-Out-Funktionalität)
 
 **Epic 2: Dateiverzeichnis**
 
@@ -57,7 +57,8 @@ Das Story Mapping ergab eine klare Strukturierung der Anforderungen in mehrere E
 
 Jedes Epic enthält spezifische Funktionen, die den Bedürfnissen der Benutzer entsprechen und gemeinsam die Gesamtfunktionalität der MindMachine-Anwendung bilden. Diese klare Strukturierung ermöglicht eine effektive Umsetzung und Priorisierung der Anforderungen im Entwicklungsprozess.
 
-### Epic 1: (Website-Zugriff) Benutzeranmeldung und Authentifizierung #frage5
+### Epic 1: (Website-Zugriff) Benutzeranmeldung und Authentifizierung 
+#frage5
 
 Dieses Epic befasst sich mit der Implementierung der Benutzeranmeldung und Authentifizierung für die MindMachine-Anwendung.
 
