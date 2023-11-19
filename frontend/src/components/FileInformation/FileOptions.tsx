@@ -5,12 +5,12 @@ import Modal from "../Others/Modal";
 
 const FileOptions = ({
   filename,
-  SetFilename,
+  SetThisFile,
   docRows,
   SetDocRows,
 }: {
   filename: string;
-  SetFilename: any;
+  SetThisFile: any;
   docRows: any[];
   SetDocRows: any;
 }) => {
@@ -34,17 +34,20 @@ const FileOptions = ({
 
   const RenameFile = () => {
     if (newFilename != "") {
+      SetThisFile((prevFileInfo: any) => ({
+        ...prevFileInfo,
+        file_name: newFilename,
+      }));
+
       API_EditDocumentName();
-      SetFilename(newFilename);
-      SetNewFilename("");
     }
   };
 
   const DeleteFile = () => {
-    // finde file
-    const fileFound = docRows.find((file) => file.name == filename);
+    const fileFound = docRows.find((file) => file.file_name == filename);
 
     if (fileFound) {
+      SetThisFile(null)
       API_DeleteDocument();
     } else {
       alert("Error. There was a problem.");
@@ -52,13 +55,15 @@ const FileOptions = ({
   };
 
   const API_DeleteDocument = async () => {
-    return await fetch(`${process.env.backendAddress}/deleteDocument/${localStorage.getItem("userID")}/${filename}`, {
-      method: 'GET'
+    return await fetch(`http://localhost:8000/deleteDocument/${localStorage.getItem("userID")}/${filename}`, {
+      method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then(res => res.json())
       .then(response => {
-        SetDocRows(docRows.filter((file) => file.name !== filename));
-        console.log(`File "${filename}" is deleted.`);
+        SetDocRows(docRows.filter((file) => file.file_name !== filename));
 
         ModalHandlerDataDelete();
         navigate("/MainWindow");
@@ -66,13 +71,22 @@ const FileOptions = ({
   }
 
   const API_EditDocumentName = async () => {
-    return await fetch(`${process.env.backendAddress}/editDocumentName/${localStorage.getItem("userID")}`, {
-      method: 'GET',
+
+    ModalHandlerDataChange();
+
+    return await fetch(`http://localhost:8000/editDocumentName/${localStorage.getItem("userID")}`, {
+      method: 'PUT',
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ "old_name": filename, "new_name": newFilename })
     })
       .then(res => res.json())
       .then(response => {
         const nextList = docRows.map((item) => {
+
+          SetNewFilename("");
+
           if (item.name === filename) {
             item.name = newFilename;
             return item;
@@ -80,9 +94,8 @@ const FileOptions = ({
             return item;
           }
         });
-  
+
         SetDocRows(nextList);
-        ModalHandlerDataChange();
       })
   }
 
