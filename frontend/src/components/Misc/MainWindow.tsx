@@ -39,7 +39,6 @@ const MainWindow: React.FC<MainWindowProps> = ({ content }) => {
     })
       .then(res => res.json())
       .then(response => {
-        console.log(response)
         SetDocRows(response)
       })
   }

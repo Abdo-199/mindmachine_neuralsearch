@@ -11,7 +11,7 @@ class API:
         self.db = dataBase
         self.router = APIRouter()
         self.stats = StatisticsHandler(self.db)
-        self.fs = FileSystemHandler()
+        self.file_system_handler = FileSystemHandler()
 
         self.setup_routes()
         self.app.include_router(self.router)
@@ -30,10 +30,8 @@ class API:
             conn.start_tls()
 
             if conn.bind():
-                print("LDAP authentication successful")
                 return LoginResponseModel(isAuthenticated=True, isAdmin=True)
           
-            print("LDAP authentication failed")
             return LoginResponseModel(isAuthenticated=False, isAdmin=False)
         
         #search
@@ -44,7 +42,7 @@ class API:
         #upload document for user id
         @self.router.post("/upload/{user_id}")
         async def upload_document(user_id, files: list[UploadFile] = File(...)):
-            FileSystemHandler.upload(self.fs, user_id, files)
+            self.file_system_handler.upload(user_id, files)
             return True
 
         #get document
@@ -55,18 +53,18 @@ class API:
         #delete document
         @self.router.delete("/deleteDocument/{user_id}/{document_id}")
         async def delete_document(user_id, document_id):
-            FileSystemHandler.delete_document(user_id, document_id=document_id)
+            self.file_system_handler.delete_document(user_id, document_id)
             return True
         
         #send file structure
         @self.router.get("/filestructure/{user_id}")
         async def get_file_structure(user_id):
-            return FileSystemHandler.get_fs_for_user(self.fs, user_id)
+            return self.file_system_handler.get_fs_for_user(user_id)
         
         #edit document name
         @self.router.put("/editDocumentName/{user_id}")
         async def edit_document_name(user_id, request: RenameFileModel):
-            FileSystemHandler.edit_document_name(user_id, request.old_name, request.new_name)
+            self.file_system_handler.edit_document_name(user_id, request.old_name, request.new_name)
             return True
         
 
