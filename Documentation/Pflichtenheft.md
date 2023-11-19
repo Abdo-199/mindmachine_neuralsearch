@@ -20,14 +20,14 @@ Die erfolgreiche Umsetzung dieser Ziele wird dazu beitragen, den Workflow der HT
 
 Im Rahmen eines kollaborativen Kundenworkshops wurde ein umfassendes Story Mapping durchgeführt, das als grundlegende Struktur für die Anforderungsanalyse der MindMachine-Anwendung dient. Dieser Workshop ermöglichte eine interaktive Zusammenarbeit zwischen den Stakeholdern und dem Entwicklungsteam, um die wesentlichen Funktionen und Anforderungen zu identifizieren. Das Story Mapping (s. Abbildung XX) diente dabei als Orientierungspunkt, um die verschiedenen Aspekte der Anwendung zu verstehen und zu strukturieren.
 
-![[Documentation/assets/20231118_Story_Mapping_DiaWIP.jpg]]
+![Sotry Mapping Diagramm](Documentation/assets/20231118_Story_Mapping_DiaWIP.jpg)
 Übersicht über Epics und User Stories:
 
 Das Story Mapping ergab eine klare Strukturierung der Anforderungen in mehrere Epics, die jeweils einen größeren funktionalen Bereich der Anwendung repräsentieren. Die wichtigsten Epics und ihre zugehörigen User Stories sind:
 
 **Epic 1: Benutzeranmeldung und Authentifizierung**
 
-- User Story 1.1: Website öffnen als Anwender (HTW-Anwender und Admin)
+- [User Story 1.1: Website öffnen als Anwender (HTW-Anwender und Admin)](#### User Story 1.1: Website öffnen als Anwender (HTW-Anwender und Admin))
 - User Story 1.2: Log-In für HTW-Anwender
 - User Story 1.3: Log-Out-Funktionalität
 
