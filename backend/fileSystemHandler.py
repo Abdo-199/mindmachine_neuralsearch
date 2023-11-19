@@ -1,5 +1,6 @@
 import os
 import config
+from datetime import datetime
 
 class FileSystemHandler:
     
@@ -8,7 +9,6 @@ class FileSystemHandler:
         self.file_extension = config.file_extension
 
     def upload(self, user_id, files):
-        print("ABC")
         self.file_system_exist(user_id=user_id)
 
         for file in files:
@@ -30,10 +30,12 @@ class FileSystemHandler:
             file_size = os.path.getsize(file_path)
 
             # Convert Bytes to Megabytes
-            file_size = file_size / 1024.0 / 1024.0
+            file_size = self.convert_bytes(file_size)
+
+            file_upload_date = self.get_last_modified_date(file_path)
 
             # Frontend Format
-            file_name_size.append({'file_name':file_name,'file_size':file_size, 'file_date': 0})
+            file_name_size.append({'file_name':file_name,'file_size':file_size, 'file_date': file_upload_date})
         
         return file_name_size
                 
@@ -67,4 +69,24 @@ class FileSystemHandler:
         else:
             os.makedirs(self.root_directory + user_id)  
 
-              
+    def convert_bytes(self, byte_size):
+        # Define the units and their respective labels
+        units = ['B', 'KB', 'MB', 'GB', 'TB']
+
+        # Start with the smallest unit (bytes) and convert
+        unit_index = 0
+        while byte_size >= 1024 and unit_index < len(units) - 1:
+            byte_size /= 1024.0
+            unit_index += 1
+
+        # Format the result with up to two decimal places
+        return f"{byte_size:.2f} {units[unit_index]}"
+
+    def get_last_modified_date(self, file_path):
+
+        stat = os.stat(file_path)
+        file_last_date =  datetime.fromtimestamp(stat.st_mtime)
+        formatted_date = file_last_date.strftime("%d.%m.%Y")
+
+        return formatted_date
+        
