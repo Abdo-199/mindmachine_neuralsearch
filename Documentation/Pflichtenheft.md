@@ -27,7 +27,7 @@ Das Story Mapping ergab eine klare Strukturierung der Anforderungen in mehrere E
 
 **Epic 1: Benutzeranmeldung und Authentifizierung**
 
-- [User Story 1.1: Website öffnen als Anwender (HTW-Anwender und Admin)](#### User Story 1.1: Website öffnen als Anwender (HTW-Anwender und Admin))
+- [User Story 1.1: Website öffnen als Anwender (HTW-Anwender und Admin)](####UserStory1.1:WebsiteöffnenalsAnwender(HTW-AnwenderundAdmin))
 - User Story 1.2: Log-In für HTW-Anwender
 - User Story 1.3: Log-Out-Funktionalität
 
