@@ -25,7 +25,7 @@ Im Rahmen eines kollaborativen Kundenworkshops wurde ein umfassendes Story Mappi
 
 Das Story Mapping ergab eine klare Strukturierung der Anforderungen in mehrere Epics, die jeweils einen größeren funktionalen Bereich der Anwendung repräsentieren. Die wichtigsten Epics und ihre zugehörigen User Stories sind:
 
-[**Epic 1: Benutzeranmeldung und Authentifizierung**](###Epic1:(Website-Zugriff)Benutzeranmeldung undAuthentifizierung)
+**[Epic 1: Benutzeranmeldung und Authentifizierung]**(###Epic1:(Website-Zugriff)Benutzeranmeldung undAuthentifizierung)
 
 - [User Story 1.1: Website öffnen als Anwender (HTW-Anwender und Admin)](####UserStory1.1:WebsiteöffnenalsAnwender(HTW-AnwenderundAdmin))
 - [User Story 1.2: Log-In für HTW-Anwender](####UserStory1.2:Log-InfürHTW-Anwender)
