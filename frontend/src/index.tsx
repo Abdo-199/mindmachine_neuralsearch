@@ -9,6 +9,13 @@ import {
   BrowserRouter, Route, Routes
 } from 'react-router-dom';
 
+/*
+import AdminPanel from './components/AdminPanel/AdminPanel';
+import FileInformation from './components/FileInformation/FileInformation';
+import SearchHistory from './components/SearchHistory/SearchHistory';
+import SearchResult from './components/SearchResult/SearchResult';*/
+
+
 const RouteLayout = () => (
   <BrowserRouter>
     <Routes>
