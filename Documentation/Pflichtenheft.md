@@ -337,6 +337,8 @@ Dieses Epic befasst sich mit der Möglichkeit für Benutzer, ihre Suchhistorie z
 ### Epic 6: Admin-Verwaltung
 
 Dieses Epic adressiert die Verwaltungsfunktionen für Administratoren. Die User Stories beschreiben die globale Änderung der Speicherkapazität, das Anzeigen von Statistiken und das Einstellen eines automatischen Time-Outs für Benutzer. Das Ziel ist es, Administratoren die Kontrolle über systemweite Einstellungen zu geben und gleichzeitig eine effiziente Verwaltung der MindMachine zu ermöglichen. Dabei werden Sicherheitsaspekte und Datenschutz berücksichtigt.
+
+---
 #### User Story 6.1: Log-In für HTW-Administrator
 
 **Rolle:** Als HTW-Administrator
@@ -346,11 +348,11 @@ Dieses Epic adressiert die Verwaltungsfunktionen für Administratoren. Die User 
 **So dass:** ich privilegierten Zugang zum Admin-Dashboard erhalte.
 
 **Akzeptanzkriterien:**
-1===. Auf der MindMachine-Website gibt es eine dedizierte Anmeldeseite für Administratoren.
+1. Auf der MindMachine-Website gibt es eine dedizierte Anmeldeseite für Administratoren.
 2. Der Administrator kann seinen speziellen Admin-Account-Namen und sein Passwort eingeben.
 3. Das System authentifiziert den Administrator mit den ===build-in=== Admin-Anmeldedaten. #frage3
 4. Bei erfolgreicher Anmeldung wird der Administrator auf das Admin-Dashboard weitergeleitet.
-===(5. Der Zugriff auf das Admin-Dashboard ist nur für authentifizierte HTW-Administratoren möglich.)
+5. Der Zugriff auf das Admin-Dashboard ist nur für authentifizierte HTW-Administratoren möglich.
 6. Im Falle von fehlerhaften Anmeldedaten erhält der Administrator eine klare Fehlermeldung.
 7. Die Admin-Anmeldung ist sicher und schützt die Privatsphäre des Administrators.
 ---
