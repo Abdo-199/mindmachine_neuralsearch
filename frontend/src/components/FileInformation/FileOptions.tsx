@@ -55,7 +55,7 @@ const FileOptions = ({
   };
 
   const API_DeleteDocument = async () => {
-    return await fetch(`http://localhost:8000/deleteDocument/${localStorage.getItem("userID")}/${filename}`, {
+    return await fetch(`http://141.45.224.114:8000/deleteDocument/${localStorage.getItem("userID")}/${filename}`, {
       method: 'DELETE',
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +74,7 @@ const FileOptions = ({
 
     ModalHandlerDataChange();
 
-    return await fetch(`http://localhost:8000/editDocumentName/${localStorage.getItem("userID")}`, {
+    return await fetch(`http://141.45.224.114:8000/editDocumentName/${localStorage.getItem("userID")}`, {
       method: 'PUT',
       headers: {
         "Content-Type": "application/json",

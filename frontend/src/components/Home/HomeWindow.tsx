@@ -44,7 +44,7 @@ const HomeWindow = ({ docRows, SetDocRows }: { docRows: any[], SetDocRows: any }
 
   const API_UploadDocument = async (formData: FormData) => {
 
-    return await fetch(`http://localhost:8000/upload/${localStorage.getItem("userID")}`, {
+    return await fetch(`http://141.45.224.114:8000/upload/${localStorage.getItem("userID")}`, {
       method: 'POST',
       body: formData
     })
