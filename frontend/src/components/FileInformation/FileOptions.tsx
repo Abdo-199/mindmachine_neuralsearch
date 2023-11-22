@@ -86,9 +86,9 @@ const FileOptions = ({
         const nextList = docRows.map((item) => {
 
           SetNewFilename("");
-
-          if (item.name === filename) {
-            item.name = newFilename;
+          
+          if (item.file_name === filename) {
+            item.file_name = newFilename;
             return item;
           } else {
             return item;
