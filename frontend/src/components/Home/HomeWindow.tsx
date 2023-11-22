@@ -5,25 +5,6 @@ import DocumentList from "./DocumentList";
 
 const HomeWindow = ({ docRows, SetDocRows }: { docRows: any[], SetDocRows: any }) => {
 
-  // gegenwärtige datei zum Hinzufügen
-  // const [file, setFile] = useState<any>();
-
-  // const selectFiles = (event: any) => {
-  //   for (let i = 0; i < event.target.files.length; i++) {
-  //     const rawFile: File = event.target.files[i];
-  //     // nehme heutiges Datum für Upload-Date
-  //     const today = new Date().toLocaleDateString();
-  //     const file = { name: rawFile.name, size: rawFile.size, date: today }
-
-  //     // keine Dateien mit doppeltem Namen hochladen 
-  //     if (!docRows.find((x) => x.name == file.name)) {
-  //       setFile(file);
-  //       docRows.push(file);
-  //     }
-  //   }
-  //   SetDocRows(docRows)
-  // };
-
   const [files, setFiles] = useState<FileList | null>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,11 +19,11 @@ const HomeWindow = ({ docRows, SetDocRows }: { docRows: any[], SetDocRows: any }
         formData.append('files', selectedFiles[i]);
       }
       
-      API_UploadDocument(formData);
+      API_UploadDocument(formData, selectedFiles);
     }
   };
 
-  const API_UploadDocument = async (formData: FormData) => {
+  const API_UploadDocument = async (formData: FormData, selectedFiles: FileList) => {
 
     return await fetch(`http://141.45.224.114:8000/upload/${localStorage.getItem("userID")}`, {
       method: 'POST',
@@ -50,18 +31,16 @@ const HomeWindow = ({ docRows, SetDocRows }: { docRows: any[], SetDocRows: any }
     })
       .then(res => res.json())
       .then(response => {
-        // for (let i = 0; i < selectedFiles.length; i++) {
-        //   const rawFile: File = selectedFiles[i];
-        //   // nehme heutiges Datum für Upload-Date
-        //   const today = new Date().toLocaleDateString();
-        //   const file = { "file_name": rawFile.name, "file_size": rawFile.size, "file_date": today }
 
-        //   // keine Dateien mit doppeltem Namen hochladen 
-        //   if (!docRows.find((x) => x.name == selectedFiles[i].name)) {
-        //     docRows.push(file);
-        //   }
-        // }
-        // SetDocRows(docRows)
+        const newDocRows = [...docRows]; // Kopiere das bestehende Array
+        for (let i = 0; i < selectedFiles.length; i++) {
+          const rawFile: File = selectedFiles[i];
+          const today = new Date().toLocaleDateString();
+          const file = { "file_name": rawFile.name, "file_size": rawFile.size, "file_date": today }
+          newDocRows.push(file);
+        }
+        console.log(newDocRows)
+        SetDocRows(newDocRows)
       })
   };
 

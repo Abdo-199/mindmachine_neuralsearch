@@ -1,3 +1,3 @@
-root_directory = '/home/mindmachine/test'
-#"./user/"
+root_directory = "./user/"
+#'/home/mindmachine/user/'
 file_extension = '.pdf'
