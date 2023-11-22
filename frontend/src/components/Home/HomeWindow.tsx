@@ -1,11 +1,17 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import "../../styles/Home/Home.css";
 import SearchInput from "./SearchInput";
 import DocumentList from "./DocumentList";
+import { MethodSignature } from "typescript";
+import { HookCallbacks } from "async_hooks";
 
-const HomeWindow = ({ docRows, SetDocRows }: { docRows: any[], SetDocRows: any }) => {
+const HomeWindow = ({ docRows, SetDocRows, GetFileStructure }: { docRows: any[], SetDocRows: any, GetFileStructure: () => void }) => {
 
   const [files, setFiles] = useState<FileList | null>(null);
+
+  useEffect(() => {
+    GetFileStructure();
+  }, [])
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
