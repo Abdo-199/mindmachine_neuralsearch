@@ -13,6 +13,6 @@ services:
       - "8000:8000"
     volumes:
       - ../backend-vol:/usr/src/app/data
-      - ../documents:/usr/src/app/documents
+      - ../mm_docs:/usr/src/app/mm_docs
     tty: true
     restart: always
