@@ -14,6 +14,12 @@ const FileOptions = ({
   docRows: any[];
   SetDocRows: any;
 }) => {
+  function checkFilename(
+    inputString: string,
+    forbiddenCharacters: RegExp
+  ): boolean {
+    return forbiddenCharacters.test(inputString);
+  }
 
   const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
   const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
@@ -33,21 +39,44 @@ const FileOptions = ({
   const navigate = useNavigate();
 
   const RenameFile = () => {
-    if (newFilename != "") {
-      SetThisFile((prevFileInfo: any) => ({
-        ...prevFileInfo,
-        file_name: newFilename,
-      }));
-
-      API_EditDocumentName();
+    // Textfeld darf nicht leer sein
+    if (newFilename == "") {
+      return;
     }
+    // Dateiname darf keine speziellen Zeichen enthalten
+    const forbiddenCharsRegex = /[!§@#$%^&*()_+{}\[\]:;<>,?~\\/-]/;
+    if (checkFilename(newFilename, forbiddenCharsRegex)) {
+      alert("Input Error. The new filename contains forbidden characters.");
+      return;
+    }
+
+    // Dateiname kann geändert werden
+    SetThisFile((prevFileInfo: any) => ({
+      ...prevFileInfo,
+      file_name: newFilename,
+    }));
+
+    const nextList = docRows.map((item) => {
+      SetNewFilename("");
+
+      if (item.file_name === filename) {
+        item.file_name = newFilename;
+        return item;
+      } else {
+        return item;
+      }
+    });
+
+    SetDocRows(nextList);
+
+    API_EditDocumentName();
   };
 
   const DeleteFile = () => {
     const fileFound = docRows.find((file) => file.file_name == filename);
 
     if (fileFound) {
-      SetThisFile(null)
+      SetThisFile(null);
       API_DeleteDocument();
     } else {
       alert("Error. There was a problem.");
@@ -55,49 +84,45 @@ const FileOptions = ({
   };
 
   const API_DeleteDocument = async () => {
-    return await fetch(`http://141.45.224.114:8000/deleteDocument/${localStorage.getItem("userID")}/${filename}`, {
-      method: 'DELETE',
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(res => res.json())
-      .then(response => {
+    return await fetch(
+      `http://141.45.224.114:8000/deleteDocument/${localStorage.getItem(
+        "userID"
+      )}/${filename}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
         SetDocRows(docRows.filter((file) => file.file_name !== filename));
 
         ModalHandlerDataDelete();
         navigate("/MainWindow");
-      })
-  }
+      });
+  };
 
   const API_EditDocumentName = async () => {
-
     ModalHandlerDataChange();
 
-    return await fetch(`http://141.45.224.114:8000/editDocumentName/${localStorage.getItem("userID")}`, {
-      method: 'PUT',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ "old_name": filename, "new_name": newFilename })
-    })
-      .then(res => res.json())
-      .then(response => {
-        const nextList = docRows.map((item) => {
-
-          SetNewFilename("");
-
-          if (item.name === filename) {
-            item.name = newFilename;
-            return item;
-          } else {
-            return item;
-          }
-        });
-
-        SetDocRows(nextList);
-      })
-  }
+    return await fetch(
+      `http://141.45.224.114:8000/editDocumentName/${localStorage.getItem(
+        "userID"
+      )}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ old_name: filename, new_name: newFilename }),
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
+      });
+  };
 
   return (
     <>
