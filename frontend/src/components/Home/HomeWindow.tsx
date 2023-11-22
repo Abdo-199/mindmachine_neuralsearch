@@ -36,7 +36,9 @@ const HomeWindow = ({ docRows, SetDocRows }: { docRows: any[], SetDocRows: any }
         for (let i = 0; i < selectedFiles.length; i++) {
           const rawFile: File = selectedFiles[i];
           const today = new Date().toLocaleDateString();
-          const file = { "file_name": rawFile.name, "file_size": rawFile.size, "file_date": today }
+          // konvertiere bytes in megabytes 
+          const convertedSize = (rawFile.size/(1024*1024)).toFixed(2)
+          const file = { "file_name": rawFile.name, "file_size": `${convertedSize} MB`, "file_date": today }
           newDocRows.push(file);
         }
         console.log(newDocRows)
