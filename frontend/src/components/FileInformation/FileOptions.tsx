@@ -81,8 +81,6 @@ const FileOptions = ({
   };
 
   const API_EditDocumentName = async () => {
-    //ModalHandlerDataChange();
-
     return await fetch(
       `http://141.45.224.114:8000/editDocumentName/${localStorage.getItem(
         "userID"
@@ -96,7 +94,20 @@ const FileOptions = ({
       }
     )
       .then((res) => res.json())
-      .then((response) => {});
+      .then((response) => {
+        
+        const nextList = docRows.map((item) => {
+          SetNewFilename("");
+
+          if (item.file_name === filename) {
+            item.file_name = newFilename;
+            return item;
+          } else {
+            return item;
+          }
+        });
+        SetDocRows(nextList);
+      });
   };
 
   return (
