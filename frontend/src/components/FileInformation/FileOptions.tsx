@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/FileInformation/FileInformation.css";
 import Modal from "../Others/Modal";
+import RenameFileModal from "../Others/RenameFileModal";
 
 const FileOptions = ({
   filename,
@@ -14,9 +15,11 @@ const FileOptions = ({
   docRows: any[];
   SetDocRows: any;
 }) => {
-
   const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
   const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
+
+  const [isConfirmed, SetIsConfirmed] = useState(false);
+  console.log(isConfirmed);
 
   const ModalHandlerDataChange = () => {
     // Modalhandler zum Ändern des Dateinamens
@@ -40,6 +43,8 @@ const FileOptions = ({
       }));
 
       API_EditDocumentName();
+      // Bestätigung über Umbenennung an Nutzer senden
+      SetIsConfirmed(true);
     }
   };
 
@@ -47,7 +52,7 @@ const FileOptions = ({
     const fileFound = docRows.find((file) => file.file_name == filename);
 
     if (fileFound) {
-      SetThisFile(null)
+      SetThisFile(null);
       API_DeleteDocument();
     } else {
       alert("Error. There was a problem.");
@@ -55,92 +60,56 @@ const FileOptions = ({
   };
 
   const API_DeleteDocument = async () => {
-    return await fetch(`http://141.45.224.114:8000/deleteDocument/${localStorage.getItem("userID")}/${filename}`, {
-      method: 'DELETE',
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(res => res.json())
-      .then(response => {
+    return await fetch(
+      `http://141.45.224.114:8000/deleteDocument/${localStorage.getItem(
+        "userID"
+      )}/${filename}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {
         SetDocRows(docRows.filter((file) => file.file_name !== filename));
 
         ModalHandlerDataDelete();
         navigate("/MainWindow");
-      })
-  }
+      });
+  };
 
   const API_EditDocumentName = async () => {
+    //ModalHandlerDataChange();
 
-    ModalHandlerDataChange();
-
-    return await fetch(`http://141.45.224.114:8000/editDocumentName/${localStorage.getItem("userID")}`, {
-      method: 'PUT',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ "old_name": filename, "new_name": newFilename })
-    })
-      .then(res => res.json())
-      .then(response => {
-        const nextList = docRows.map((item) => {
-
-          SetNewFilename("");
-          
-          if (item.file_name === filename) {
-            item.file_name = newFilename;
-            return item;
-          } else {
-            return item;
-          }
-        });
-
-        SetDocRows(nextList);
-      })
-  }
+    return await fetch(
+      `http://141.45.224.114:8000/editDocumentName/${localStorage.getItem(
+        "userID"
+      )}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ old_name: filename, new_name: newFilename }),
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => {});
+  };
 
   return (
     <>
       {modalHandlerDataChange ? (
-        // TODO refactor content into new component: RenameFileModalComponent
-        <Modal
-          header={"Renaming a File"}
-          content={
-            <div>
-              <hr className="hr-style"></hr>
-              <div>
-                <span>Old Filename: {filename}</span>
-              </div>
-              <br></br>
-              <div>
-                <span>
-                  New Filename:{" "}
-                  <input
-                    onChange={(e) => SetNewFilename(e.target.value + ".pdf")}
-                  ></input>{" "}
-                  .pdf
-                </span>
-              </div>
-              <br></br>
-              <hr className="hr-style"></hr>
-              <div className="renameFileOptions-buttons">
-                <button
-                  className="fileOption-button"
-                  onClick={ModalHandlerDataChange}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="fileOption-button"
-                  onClick={() => RenameFile()}
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-          }
+        <RenameFileModal
+          RenameFile={RenameFile}
+          isConfirmed={isConfirmed}
+          SetIsConfirmed={SetIsConfirmed}
+          filename={filename}
+          SetNewFilename={SetNewFilename}
           closeModal={ModalHandlerDataChange}
-        ></Modal>
+        ></RenameFileModal>
       ) : null}
       {modalHandlerDataDelete ? (
         // TODO refactor content into new component: DeleteFileModalComponent
