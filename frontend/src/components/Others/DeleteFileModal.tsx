@@ -1,7 +1,6 @@
 import React from "react";
 import "../../styles/Others/Modal.css";
 import Modal from "../Others/Modal";
-import { useNavigate } from "react-router-dom";
 
 const DeleteFileModal = ({
   DeleteFile,

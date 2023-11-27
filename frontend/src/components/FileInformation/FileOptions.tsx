@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/FileInformation/FileInformation.css";
 import RenameFileModal from "../Others/RenameFileModal";
 import DeleteFileModal from "../Others/DeleteFileModal";
@@ -9,11 +8,11 @@ const FileOptions = ({
   SetThisFile,
   docRows,
   SetDocRows,
-  showModalHandlerDataDelete,
-  ShowModalHandlerDataDelete,
+  modalHandlerDeleteConfirm,
+  ModalHandlerDeleteConfirm,
 }: {
-  showModalHandlerDataDelete: boolean;
-  ShowModalHandlerDataDelete: any;
+  modalHandlerDeleteConfirm: boolean;
+  ModalHandlerDeleteConfirm: any;
   filename: string;
   SetThisFile: any;
   docRows: any[];
@@ -58,9 +57,8 @@ const FileOptions = ({
       // Bestätigung über Löschung an Nutzer senden
       // alert("File is successfully deleted.");
       SetIsConfirmed(true);
-      ShowModalHandlerDataDelete();
-      console.log(showModalHandlerDataDelete);
-      
+      ModalHandlerDeleteConfirm();
+      console.log(modalHandlerDeleteConfirm);
     } else {
       alert("Error. There was a problem.");
     }
@@ -81,7 +79,6 @@ const FileOptions = ({
       .then((res) => res.json())
       .then((response) => {
         SetDocRows(docRows.filter((file) => file.file_name !== filename));
-        //navigate("/MainWindow");
       });
   };
 
@@ -134,35 +131,7 @@ const FileOptions = ({
           filename={filename}
           closeModal={ModalHandlerDataDelete}
         ></DeleteFileModal>
-      ) : // <Modal
-      //   header={"Deleting a File"}
-      //   content={
-      //     <div>
-      //       <hr className="hr-style"></hr>
-      //       <div>
-      //         <span>Do you want to delete the file: {filename}?</span>
-      //       </div>
-      //       <br></br>
-      //       <hr className="hr-style"></hr>
-      //       <div className="renameFileOptions-buttons">
-      //         <button
-      //           className="fileOption-button"
-      //           onClick={ModalHandlerDataDelete}
-      //         >
-      //           Cancel
-      //         </button>
-      //         <button
-      //           className="fileOption-button"
-      //           onClick={() => DeleteFile()}
-      //         >
-      //           OK
-      //         </button>
-      //       </div>
-      //     </div>
-      //   }
-      //   closeModal={ModalHandlerDataDelete}
-      // ></Modal>
-      null}
+      ) : null}
       <div id="fileOptions-buttons">
         <button
           className="fileOption-button"

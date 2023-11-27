@@ -28,12 +28,12 @@ const FileInformationWindow = ({
     SearchAndSetObject();
   }, []);
 
-  const [showModalHandlerDataDelete, setShowModalHandlerDataDelete] =
+  const [modalHandlerDeleteConfirm, SetModalHandlerDeleteConfirm] =
     useState(false);
 
-  const ShowModalHandlerDataDelete = () => {
-    // Modalhandler zum Löschen der Datei
-    setShowModalHandlerDataDelete((current) => !current);
+  const ModalHandlerDeleteConfirm = () => {
+    // Modalhandler zur Benachrichtigung des Löschvorgangs
+    SetModalHandlerDeleteConfirm((current) => !current);
   };
 
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const FileInformationWindow = ({
   // Funktion zum Suchen und Setzen des gefundenen Objekts
   const SearchAndSetObject = () => {
     const foundItem = docRows.find((item) => item.file_name === filenameParams);
-    console.log(showModalHandlerDataDelete);
+    console.log(modalHandlerDeleteConfirm);
 
     if (foundItem) {
       SetThisFile(foundItem);
@@ -62,15 +62,15 @@ const FileInformationWindow = ({
           ></FileInfosCard>
           {thisFile && (
             <FileOptions
-              showModalHandlerDataDelete={showModalHandlerDataDelete}
-              ShowModalHandlerDataDelete={ShowModalHandlerDataDelete}
+              modalHandlerDeleteConfirm={modalHandlerDeleteConfirm}
+              ModalHandlerDeleteConfirm={ModalHandlerDeleteConfirm}
               filename={thisFile.file_name}
               SetThisFile={SetThisFile}
               docRows={docRows}
               SetDocRows={SetDocRows}
             ></FileOptions>
           )}
-          {showModalHandlerDataDelete ? (
+          {modalHandlerDeleteConfirm ? (
             <Modal
               header={"Deleting a File"}
               content={
@@ -84,8 +84,8 @@ const FileInformationWindow = ({
                   <button
                     className="fileOption-button"
                     onClick={() => {
-                      console.log(showModalHandlerDataDelete);
-                      ShowModalHandlerDataDelete();
+                      console.log(modalHandlerDeleteConfirm);
+                      ModalHandlerDeleteConfirm();
                       navigate("/MainWindow");
                     }}
                   >
@@ -94,18 +94,11 @@ const FileInformationWindow = ({
                 </div>
               }
               closeModal={() => {
-                ShowModalHandlerDataDelete();
-                console.log(showModalHandlerDataDelete);
+                ModalHandlerDeleteConfirm();
+                console.log(modalHandlerDeleteConfirm);
               }}
             ></Modal>
-          ) : // <DeleteFileModal
-          //   DeleteFile={() => {}}
-          //   isConfirmed={isConfirmed}
-          //   SetIsConfirmed={SetIsConfirmed}
-          //   filename={thisFile?.file_name}
-          //   closeModal={ShowModalHandlerDataDelete}
-          // ></DeleteFileModal>
-          null}
+          ) : null}
         </div>
       </div>
     </>
