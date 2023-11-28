@@ -43,6 +43,7 @@ const FileOptions = ({
     if (newFilename == "") {
       return;
     }
+
     // Dateiname darf keine speziellen Zeichen enthalten
     const forbiddenCharsRegex = /[!§@#$%^&*()_+{}\[\]:;<>,?~\\/-]/;
     if (checkFilename(newFilename, forbiddenCharsRegex)) {
@@ -55,19 +56,6 @@ const FileOptions = ({
       ...prevFileInfo,
       file_name: newFilename,
     }));
-
-    const nextList = docRows.map((item) => {
-      SetNewFilename("");
-
-      if (item.file_name === filename) {
-        item.file_name = newFilename;
-        return item;
-      } else {
-        return item;
-      }
-    });
-
-    SetDocRows(nextList);
 
     API_EditDocumentName();
   };
@@ -121,6 +109,18 @@ const FileOptions = ({
     )
       .then((res) => res.json())
       .then((response) => {
+        const nextList = docRows.map((item) => {
+          SetNewFilename("");
+
+          if (item.file_name === filename) {
+            item.file_name = newFilename;
+            return item;
+          } else {
+            return item;
+          }
+        });
+
+        SetDocRows(nextList);
       });
   };
 
