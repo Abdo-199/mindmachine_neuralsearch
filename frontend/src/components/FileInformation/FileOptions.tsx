@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../styles/FileInformation/FileInformation.css";
 import Modal from "../Others/Modal";
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const FileOptions = ({
   filename,
@@ -14,6 +19,21 @@ const FileOptions = ({
   docRows: any[];
   SetDocRows: any;
 }) => {
+  const [isFileOpened, setIsFileOpened] = useState<boolean>(false);
+  const [numPages, setNumPages] = useState<number[]>([1]);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+    const numpages = Array.from({ length: numPages + 1 }, (_, index) => (index += 1)
+    );
+    console.log("This1");
+    
+    console.log(numpages);
+    console.log(numPages);
+    console.log("This2");
+    
+    setNumPages(numpages);
+  }
 
   const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
   const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
@@ -28,9 +48,17 @@ const FileOptions = ({
     setModalHandlerDataDelete((current) => !current);
   };
 
+  const IsFileOpened = () => {
+    setIsFileOpened((current) => !current);
+  };
+
   const [newFilename, SetNewFilename] = useState("");
 
   const navigate = useNavigate();
+
+  const OpenFile = () => {
+    IsFileOpened();
+  };
 
   const RenameFile = () => {
     if (newFilename != "") {
@@ -47,7 +75,7 @@ const FileOptions = ({
     const fileFound = docRows.find((file) => file.file_name == filename);
 
     if (fileFound) {
-      SetThisFile(null)
+      SetThisFile(null);
       API_DeleteDocument();
     } else {
       alert("Error. There was a problem.");
@@ -55,38 +83,46 @@ const FileOptions = ({
   };
 
   const API_DeleteDocument = async () => {
-    return await fetch(`http://141.45.224.114:8000/deleteDocument/${localStorage.getItem("userID")}/${filename}`, {
-      method: 'DELETE',
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(res => res.json())
-      .then(response => {
+    return await fetch(
+      `http://141.45.224.114:8000/deleteDocument/${localStorage.getItem(
+        "userID"
+      )}/${filename}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((_response) => {
         SetDocRows(docRows.filter((file) => file.file_name !== filename));
 
         ModalHandlerDataDelete();
         navigate("/MainWindow");
-      })
-  }
+      });
+  };
 
   const API_EditDocumentName = async () => {
-
     ModalHandlerDataChange();
 
-    return await fetch(`http://141.45.224.114:8000/editDocumentName/${localStorage.getItem("userID")}`, {
-      method: 'PUT',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ "old_name": filename, "new_name": newFilename })
-    })
-      .then(res => res.json())
-      .then(response => {
+    return await fetch(
+      `http://141.45.224.114:8000/editDocumentName/${localStorage.getItem(
+        "userID"
+      )}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ old_name: filename, new_name: newFilename }),
+      }
+    )
+      .then((res) => res.json())
+      .then((_response) => {
         const nextList = docRows.map((item) => {
-
           SetNewFilename("");
-          
+
           if (item.file_name === filename) {
             item.file_name = newFilename;
             return item;
@@ -96,11 +132,37 @@ const FileOptions = ({
         });
 
         SetDocRows(nextList);
-      })
-  }
+      });
+  };
 
   return (
     <>
+      {isFileOpened && (
+        <>
+          <Modal
+            header={""}
+            content={
+              <div>
+                <br></br>
+                <Document
+                  file={"/sample.pdf"}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                >
+                  {numPages.map((page) => (
+                    <Page
+                      renderMode="svg"
+                      pageNumber={page}
+                      renderTextLayer={true}
+                      renderAnnotationLayer={false}
+                    />
+                  ))}
+                </Document>
+              </div>
+            }
+            closeModal={IsFileOpened}
+          ></Modal>
+        </>
+      )}
       {modalHandlerDataChange ? (
         // TODO refactor content into new component: RenameFileModalComponent
         <Modal
@@ -174,10 +236,7 @@ const FileOptions = ({
         ></Modal>
       ) : null}
       <div id="fileOptions-buttons">
-        <button
-          className="fileOption-button"
-          onClick={() => console.log("Open")}
-        >
+        <button className="fileOption-button" onClick={() => OpenFile()}>
           Open file
         </button>
         <button className="fileOption-button" onClick={ModalHandlerDataChange}>
