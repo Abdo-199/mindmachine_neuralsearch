@@ -84,7 +84,6 @@ const FileInformationWindow = ({
                   <button
                     className="fileOption-button"
                     onClick={() => {
-                      console.log(modalHandlerDeleteConfirm);
                       ModalHandlerDeleteConfirm();
                       navigate("/MainWindow");
                     }}
@@ -95,7 +94,7 @@ const FileInformationWindow = ({
               }
               closeModal={() => {
                 ModalHandlerDeleteConfirm();
-                console.log(modalHandlerDeleteConfirm);
+                navigate("/MainWindow");
               }}
             ></Modal>
           ) : null}
