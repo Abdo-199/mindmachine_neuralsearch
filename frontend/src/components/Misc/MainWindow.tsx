@@ -26,9 +26,6 @@ const MainWindow: React.FC<MainWindowProps> = ({ content }) => {
     if (localStorage.getItem("userID") == null || localStorage.getItem("isAdmin") == null) {
       navigate("/")
     }
-    else {
-      GetFileStructure();
-    }
   }, [])
 
 const GetFileStructure = async () => {
@@ -45,7 +42,7 @@ const GetFileStructure = async () => {
 
 //Prüfe, was angezeigt werden soll
 const componentMap: { [key: string]: React.ReactElement } = {
-  "HomeWindow": <HomeWindow docRows={docRows} SetDocRows={SetDocRows} />,
+  "HomeWindow": <HomeWindow docRows={docRows} SetDocRows={SetDocRows} GetFileStructure={GetFileStructure}/>,
   "LegalNotice": <LegalNotice />,
   "SearchHistory": <SearchHistory />,
   "SearchResult": <SearchResult />,

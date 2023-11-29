@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 
 const DocumentRow = ({file}: {file: any}) => {
-  // nehme heutiges Datum für Upload-Date
-  // const date = new Date().toLocaleDateString()
-  // konvertiere bytes in megabytes
   return (
     <tr>
       <td>{file.file_name}</td>
