@@ -60,8 +60,11 @@ class FileSystemHandler:
             # Rename the file
             os.rename(old_file_full_path, new_file_full_path)
 
-    def get_document(self, document_id):
-        pass
+    def get_document_path(self, user_id, document_name):
+        if os.path.exists(self.root_directory + user_id + "/" + document_name):
+            return self.root_directory + user_id + "/" + document_name
+        else:
+            return False
 
     def file_system_exist(self, user_id):
         if os.path.exists(self.root_directory + user_id):

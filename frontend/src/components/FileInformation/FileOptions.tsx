@@ -1,8 +1,10 @@
-import { useState, ChangeEvent, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import "../../styles/FileInformation/FileInformation.css";
-import Modal from "../Others/Modal";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf";
+import Modal from "../Others/Modal";
+import RenameFileModal from "../Others/RenameFileModal";
+import DeleteFileModal from "../Others/DeleteFileModal";
+import "../../styles/FileInformation/FileInformation.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 
@@ -13,48 +15,50 @@ const FileOptions = ({
   SetThisFile,
   docRows,
   SetDocRows,
+  modalHandlerDeleteConfirm,
+  ModalHandlerDeleteConfirm,
 }: {
+  modalHandlerDeleteConfirm: boolean;
+  ModalHandlerDeleteConfirm: any;
   filename: string;
   SetThisFile: any;
   docRows: any[];
   SetDocRows: any;
 }) => {
+  
+  const [newFilename, SetNewFilename] = useState("");
   const [isFileOpened, setIsFileOpened] = useState<boolean>(false);
   const [numPages, setNumPages] = useState<number[]>([1]);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
+  const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
+  const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
+  
+  const [isConfirmed, SetIsConfirmed] = useState(false);
+  
+  const navigate = useNavigate();
+  
+  // Dokument erfolgreich geöffnet
   function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
     const numpages = Array.from({ length: numPages + 1 }, (_, index) => (index += 1)
     );
-    console.log("This1");
-    
-    console.log(numpages);
-    console.log(numPages);
-    console.log("This2");
-    
     setNumPages(numpages);
   }
-
-  const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
-  const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
-
+  // Modalhandler zum Ändern des Dateinamens
   const ModalHandlerDataChange = () => {
-    // Modalhandler zum Ändern des Dateinamens
     setModalHandlerDataChange((current) => !current);
   };
 
+  // Modalhandler zum Löschen der Datei
   const ModalHandlerDataDelete = () => {
-    // Modalhandler zum Löschen der Datei
     setModalHandlerDataDelete((current) => !current);
   };
 
+  // Modalhandler zum Öffnen der PDF
   const IsFileOpened = () => {
     setIsFileOpened((current) => !current);
   };
 
-  const [newFilename, SetNewFilename] = useState("");
-
-  const navigate = useNavigate();
 
   const OpenFile = () => {
     IsFileOpened();
@@ -68,6 +72,8 @@ const FileOptions = ({
       }));
 
       API_EditDocumentName();
+      // Bestätigung über Umbenennung an Nutzer senden
+      SetIsConfirmed(true);
     }
   };
 
@@ -77,6 +83,10 @@ const FileOptions = ({
     if (fileFound) {
       SetThisFile(null);
       API_DeleteDocument();
+      // Bestätigung über Löschung an Nutzer senden
+      SetIsConfirmed(true);
+      ModalHandlerDeleteConfirm();
+      console.log(modalHandlerDeleteConfirm);
     } else {
       alert("Error. There was a problem.");
     }
@@ -95,17 +105,12 @@ const FileOptions = ({
       }
     )
       .then((res) => res.json())
-      .then((_response) => {
+      .then((response) => {
         SetDocRows(docRows.filter((file) => file.file_name !== filename));
-
-        ModalHandlerDataDelete();
-        navigate("/MainWindow");
       });
   };
 
   const API_EditDocumentName = async () => {
-    ModalHandlerDataChange();
-
     return await fetch(
       `http://141.45.224.114:8000/editDocumentName/${localStorage.getItem(
         "userID"
@@ -130,7 +135,6 @@ const FileOptions = ({
             return item;
           }
         });
-
         SetDocRows(nextList);
       });
   };
@@ -164,76 +168,23 @@ const FileOptions = ({
         </>
       )}
       {modalHandlerDataChange ? (
-        // TODO refactor content into new component: RenameFileModalComponent
-        <Modal
-          header={"Renaming a File"}
-          content={
-            <div>
-              <hr className="hr-style"></hr>
-              <div>
-                <span>Old Filename: {filename}</span>
-              </div>
-              <br></br>
-              <div>
-                <span>
-                  New Filename:{" "}
-                  <input
-                    onChange={(e) => SetNewFilename(e.target.value + ".pdf")}
-                  ></input>{" "}
-                  .pdf
-                </span>
-              </div>
-              <br></br>
-              <hr className="hr-style"></hr>
-              <div className="renameFileOptions-buttons">
-                <button
-                  className="fileOption-button"
-                  onClick={ModalHandlerDataChange}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="fileOption-button"
-                  onClick={() => RenameFile()}
-                >
-                  Save
-                </button>
-              </div>
-            </div>
-          }
+        <RenameFileModal
+          RenameFile={RenameFile}
+          isConfirmed={isConfirmed}
+          SetIsConfirmed={SetIsConfirmed}
+          filename={filename}
+          SetNewFilename={SetNewFilename}
           closeModal={ModalHandlerDataChange}
-        ></Modal>
+        ></RenameFileModal>
       ) : null}
       {modalHandlerDataDelete ? (
-        // TODO refactor content into new component: DeleteFileModalComponent
-        <Modal
-          header={"Deleting a File"}
-          content={
-            <div>
-              <hr className="hr-style"></hr>
-              <div>
-                <span>Do you want to delete the file: {filename}?</span>
-              </div>
-              <br></br>
-              <hr className="hr-style"></hr>
-              <div className="renameFileOptions-buttons">
-                <button
-                  className="fileOption-button"
-                  onClick={ModalHandlerDataDelete}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="fileOption-button"
-                  onClick={() => DeleteFile()}
-                >
-                  OK
-                </button>
-              </div>
-            </div>
-          }
+        <DeleteFileModal
+          DeleteFile={DeleteFile}
+          isConfirmed={isConfirmed}
+          SetIsConfirmed={SetIsConfirmed}
+          filename={filename}
           closeModal={ModalHandlerDataDelete}
-        ></Modal>
+        ></DeleteFileModal>
       ) : null}
       <div id="fileOptions-buttons">
         <button className="fileOption-button" onClick={() => OpenFile()}>

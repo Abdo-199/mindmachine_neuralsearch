@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter, File, UploadFile, Form
+from fastapi import FastAPI, APIRouter, File, UploadFile, Form, HTTPException
+from fastapi.responses import FileResponse
 from fileSystemHandler import FileSystemHandler
 from statisticsHandler import StatisticsHandler
 from ldap3 import Server, Connection
@@ -45,10 +46,13 @@ class API:
             self.file_system_handler.upload(user_id, files)
             return True
 
-        #get document
-        @self.router.get("/document/{document_id}")
-        async def get_document(document_id):
-            return True
+        #Sends a pdf file to the Website for the viewer
+        @self.router.get("/document")
+        async def get_document(user_id: str, document_name: str):
+            filepath = self.file_system_handler.get_document_path(user_id, document_name)
+            if not filepath:
+                raise HTTPException(status_code=404, detail="File not found")
+            return FileResponse(path=filepath, filename=document_name, media_type="application/pdf")
 
         #delete document
         @self.router.delete("/deleteDocument/{user_id}/{document_id}")
