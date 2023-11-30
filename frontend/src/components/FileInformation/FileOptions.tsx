@@ -183,8 +183,8 @@ const FileOptions = ({
       {isFileOpened && (
         <iframe
           title="pdf-viewer"
-          width={800}
-          height={1000}
+          width={"100%"}
+          height={"1000"}
           src={pdfURL}
         ></iframe>
       )}
