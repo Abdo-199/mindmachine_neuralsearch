@@ -36,7 +36,7 @@ backend_build:
   script:
     - cd backend
     - echo Baue das Backend
-    - pip install -r requirements.txt
+    - pip install --no-cache-dir -r requirements.txt
 
 deploy_Production:
   image: ubuntu:latest
