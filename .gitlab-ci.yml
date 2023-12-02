@@ -9,28 +9,6 @@ cache:
     - frontend/node_modules/
     - backend/.venv/ 
 
-# variables:
-#   DOCKER_HOST: tcp://docker:2375/
-#   DOCKER_DRIVER: overlay2
-
-# # Official docker compose image.
-# image:
-#   name: docker/compose:latest
-
-# services:
-#   - docker:dind
-
-# before_script:
-#   - docker version
-#   - docker-compose version
-
-# build:
-#   stage: build
-#   script:
-#     - docker-compose down
-#     - docker-compose build
-#     - docker-compose up
-
 react_build:
   stage: build
   image: node:latest
