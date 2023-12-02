@@ -9,17 +9,46 @@ cache:
     - frontend/node_modules/
     - backend/.venv/ 
 
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
 
+# Official docker compose image.
+image:
+  name: docker/compose:latest
 
-react_build:
+services:
+  - docker:dind
+
+before_script:
+  - docker version
+  - docker-compose version
+
+build:
   stage: build
-  image: node:latest
   script:
-    - cd frontend
-    - echo Installiere npm-packages
-    - npm install 
-    - echo Baue das Frontend
-    - CI=false npm run build
+    - docker-compose down
+    - docker-compose build
+    - docker-compose up
+
+# react_build:
+#   stage: build
+#   image: node:latest
+#   script:
+#     - cd frontend
+#     - echo Installiere npm-packages
+#     - npm install 
+#     - echo Baue das Frontend
+#     - CI=false npm run build
+
+
+# backend_build:
+#   stage: build
+#   image: python:latest
+#   script:
+#     - cd backend
+#     - echo Baue das Backend
+#     - pip install --no-cache-dir -r requirements.txt
 
 react_test:
  stage: test
@@ -29,14 +58,6 @@ react_test:
    - npm install
    - echo Teste das Frontend
    - CI=false npm run test
-
-backend_build:
-  stage: build
-  image: python:latest
-  script:
-    - cd backend
-    - echo Baue das Backend
-    - pip install --no-cache-dir -r requirements.txt
 
 deploy_Production:
   image: ubuntu:latest
