@@ -13,42 +13,42 @@ cache:
 #   DOCKER_HOST: tcp://docker:2375/
 #   DOCKER_DRIVER: overlay2
 
-# Official docker compose image.
-image:
-  name: docker/compose:latest
+# # Official docker compose image.
+# image:
+#   name: docker/compose:latest
 
-services:
-  - docker:dind
+# services:
+#   - docker:dind
 
-before_script:
-  - docker version
-  - docker-compose version
+# before_script:
+#   - docker version
+#   - docker-compose version
 
-build:
+# build:
+#   stage: build
+#   script:
+#     - docker-compose down
+#     - docker-compose build
+#     - docker-compose up
+
+react_build:
   stage: build
+  image: node:latest
   script:
-    - docker-compose down
-    - docker-compose build
-    - docker-compose up
-
-# react_build:
-#   stage: build
-#   image: node:latest
-#   script:
-#     - cd frontend
-#     - echo Installiere npm-packages
-#     - npm install 
-#     - echo Baue das Frontend
-#     - CI=false npm run build
+    - cd frontend
+    - echo Installiere npm-packages
+    - npm install 
+    - echo Baue das Frontend
+    - CI=false npm run build
 
 
-# backend_build:
-#   stage: build
-#   image: python:latest
-#   script:
-#     - cd backend
-#     - echo Baue das Backend
-#     - pip install --no-cache-dir -r requirements.txt
+backend_build:
+  stage: build
+  image: python:latest
+  script:
+    - cd backend
+    - echo Baue das Backend
+    - pip install --no-cache-dir -r requirements.txt
 
 react_test:
  stage: test
