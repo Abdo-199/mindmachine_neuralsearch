@@ -1,27 +1,27 @@
-import  { useState}from 'react'
+import { useState } from "react";
 import Modal from "../Others/Modal";
 import { useNavigate } from "react-router-dom";
+import LogOutTimer from "./LogoutTimer";
 
 const LogoutConfirm = () => {
   const navigate = useNavigate();
-    
-  const [modalLogOut, setModalLogOut] = useState(false)
 
-  const logOutModal = ()=>{
-  setModalLogOut((current) => !current)
-  
-  }
+  const [modalLogOut, setModalLogOut] = useState(false);
+
+  const logOutModal = () => {
+    setModalLogOut((current) => !current);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("userID");
     localStorage.removeItem("isAdmin");
+    sessionStorage.removeItem("login_datum");
     navigate("/");
   };
   return (
-    
     <>
-    {modalLogOut ?  <Modal 
-          
+      {modalLogOut ? (
+        <Modal
           header={"Logout"}
           content={
             <div>
@@ -32,10 +32,7 @@ const LogoutConfirm = () => {
               <br></br>
               <hr className="hr-style"></hr>
               <div className="renameFileOptions-buttons">
-                <button
-                  className="fileOption-button"
-                  onClick={logOutModal}
-                >
+                <button className="fileOption-button" onClick={logOutModal}>
                   Cancel
                 </button>
                 <button
@@ -48,13 +45,16 @@ const LogoutConfirm = () => {
             </div>
           }
           closeModal={logOutModal}
-        ></Modal>:null}
-          <div className="header-button" onClick={() => setModalLogOut(true)}>
+        ></Modal>
+      ) : null}
+      <div
+        className="header-button"
+        onClick={() => setModalLogOut(true)}
+      >
         <p>Logout</p>
+        {/* <LogOutTimer></LogOutTimer> */}
       </div>
     </>
-      
-
   );
 };
 
