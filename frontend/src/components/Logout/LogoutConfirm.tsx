@@ -48,12 +48,11 @@ const LogoutConfirm = () => {
         ></Modal>
       ) : null}
       <div
-        style={{ flexDirection: "row", marginTop: 18 }}
         className="header-button"
         onClick={() => setModalLogOut(true)}
       >
         <p>Logout</p>
-        <LogOutTimer></LogOutTimer>
+        {/* <LogOutTimer></LogOutTimer> */}
       </div>
     </>
   );
