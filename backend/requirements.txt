@@ -6,3 +6,7 @@ pydantic
 qdrant-client
 ldap3
 python-multipart
+torch
+transformers
+sentence-transformers
+PyPDF2
