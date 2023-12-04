@@ -1,14 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Document, Page, pdfjs } from "react-pdf";
-import Modal from "../Others/Modal";
 import RenameFileModal from "../Others/RenameFileModal";
 import DeleteFileModal from "../Others/DeleteFileModal";
 import "../../styles/FileInformation/FileInformation.css";
-import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-import "react-pdf/dist/esm/Page/TextLayer.css";
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const FileOptions = ({
   filename,
@@ -25,6 +18,13 @@ const FileOptions = ({
   docRows: any[];
   SetDocRows: any;
 }) => {
+  function checkFilename(
+    inputString: string,
+    forbiddenCharacters: RegExp
+  ): boolean {
+    return forbiddenCharacters.test(inputString);
+  }
+
   const [newFilename, SetNewFilename] = useState("");
   const [isFileOpened, setIsFileOpened] = useState<boolean>(false);
 
@@ -58,14 +58,26 @@ const FileOptions = ({
 
   // rename a file
   const RenameFile = () => {
-    if (newFilename != "") {
-      SetThisFile((prevFileInfo: any) => ({
-        ...prevFileInfo,
-        file_name: newFilename,
-      }));
-      API_EditDocumentName();
-      SetIsConfirmed(true);
+    if (newFilename == "") {
+      return;
     }
+
+    // file name should not consist of any forbidden characters
+    const forbiddenCharsRegex = /[\\/?#$"`|^&*:;<>]/;
+    if (checkFilename(newFilename, forbiddenCharsRegex)) {
+      alert("Input Error. The new filename contains forbidden characters.");
+      return;
+    }
+
+    // filename will be changed
+    SetThisFile((prevFileInfo: any) => ({
+      ...prevFileInfo,
+      file_name: newFilename,
+    }));
+    API_EditDocumentName();
+
+    // send confirmation message to user that file has been renamed successfully
+    SetIsConfirmed(true);
   };
 
   // delete a file
@@ -94,7 +106,7 @@ const FileOptions = ({
       const pdfUrl = URL.createObjectURL(blob);
       console.log(blob);
       console.log(pdfUrl);
-      console.log(filename);      
+      console.log(filename);
       setPDFURL(pdfUrl);
     });
   };
