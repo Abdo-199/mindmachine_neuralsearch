@@ -63,7 +63,7 @@ const FileOptions = ({
     }
 
     // file name should not consist of any forbidden characters
-    const forbiddenCharsRegex = /[?#$`^&*()_\[\]:;<>,~\\/]/;
+    const forbiddenCharsRegex = /[\\/?#$"`|^&*:;<>]/;
     if (checkFilename(newFilename, forbiddenCharsRegex)) {
       alert("Input Error. The new filename contains forbidden characters.");
       return;
