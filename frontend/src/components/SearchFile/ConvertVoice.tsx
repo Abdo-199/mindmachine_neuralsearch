@@ -1,3 +1,4 @@
+import React, {useState} from 'react'
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
@@ -12,22 +13,25 @@ const ConvertVoice = () => {
   const {
     transcript,
     resetTranscript,
-    browserSupportsSpeechRecognition,
     listening,
   } = useSpeechRecognition();
 
+  const [transcriptText, setTranscriptText] = useState(transcript)
   const startListening = () => {
     resetTranscript()
-    SpeechRecognition.startListening({ continuous: true, language: "en-GB  " });
+    SpeechRecognition.startListening({ continuous: true, language: "en-GB" });
   };
 
   const stopListening = async () => {
+    setTranscriptText(transcript)
     await SpeechRecognition.stopListening();
   }
 
   return (
     <>
-      <input id="searchInput" value={transcript} placeholder="Start a search"></input>
+      <input id="searchInput" value={listening?transcript : transcriptText} onChange={(e)=>{
+        setTranscriptText (e.target.value)
+      }} placeholder="Start a search"></input>
 
       <button id="searchButton" style={{fontSize: "1.3rem"}} onClick={() => navigate("/SearchResult")}>Search</button>
 
@@ -48,11 +52,6 @@ const ConvertVoice = () => {
           />
         </button>
       )}
-
-      {/*
-         <button onClick={stopListening}>Stop Listening</button>
-        <button onClick={resetTranscript}>Clear</button>
-        */}
     </>
   );
 };
