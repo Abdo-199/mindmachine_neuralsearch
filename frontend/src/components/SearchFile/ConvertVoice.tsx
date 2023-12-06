@@ -8,8 +8,8 @@ import SpeechRecognition, {
 
 const ConvertVoice = () => {
   
-
   const navigate = useNavigate();
+
   const {
     transcript,
     resetTranscript,
@@ -27,13 +27,29 @@ const ConvertVoice = () => {
     await SpeechRecognition.stopListening();
   }
 
+  const API_Search = async () => {
+    return await fetch(
+      `http://localhost:8000/search?user_id=${localStorage.getItem("userID")}&query=${transcriptText}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response)
+        //navigate("/SearchResult")
+      });
+  };
+
   return (
     <>
       <input id="searchInput" value={listening?transcript : transcriptText} onChange={(e)=>{
-        setTranscriptText (e.target.value)
+        setTranscriptText(e.target.value)
       }} placeholder="Start a search"></input>
 
-      <button id="searchButton" style={{fontSize: "1.3rem"}} onClick={() => navigate("/SearchResult")}>Search</button>
+      <button id="searchButton" style={{fontSize: "1.3rem"}} onClick={() => API_Search()}>Search</button>
 
       {listening ? (
         <button id="micButton" style={{ backgroundColor: "red" }}>
