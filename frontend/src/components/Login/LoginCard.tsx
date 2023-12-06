@@ -56,7 +56,7 @@ const LoginCard = () => {
         id="login-pic"
         className="avatar"
         // put in a much cooler logo for our web-app maybe?
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9YZj5Mx_JuC9-pYmy9DLJD9gTMl-jvV5lRoUNti104l9fSOxRqyE40rMajuUD2JYDCy0&usqp=CAU"
+        src="mindmachine_logo.png"
         alt="avatar"
         width={100}
         height={100}
