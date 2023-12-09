@@ -36,15 +36,9 @@ backend_build:
     - python main.py &
     - APP_PID=$!
     - sleep 10 # Allow some time for the application to start
-    - if ps -p $APP_PID > /dev/null
-      then
-        echo "Application is running"
-      else
-        echo "Application failed to start"
-        exit 1
-      fi
-    # Clean up: stop the application
-    - kill $APP_PID 
+    - ps -p $APP_PID > /dev/null && echo "Application is running" || (echo "Application failed to start" && exit 1)
+    - kill $APP_PID # Clean up: stop the application
+
 
 
 
