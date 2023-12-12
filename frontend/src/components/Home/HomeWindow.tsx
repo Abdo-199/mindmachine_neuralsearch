@@ -29,15 +29,24 @@ const HomeWindow = ({
 
     const selectedFiles = event.target.files;
 
+    let flag:boolean = false;
+
     if (selectedFiles) {
-      //setFiles(selectedFiles);
       const formData = new FormData();
 
       for (let i = 0; i < selectedFiles.length; i++) {
+        if (selectedFiles[i].name.includes("+")) {
+          flag = true;
+          setModalOcrErrorMessage(`File \"${selectedFiles[i].name}\" could not be uploaded. There is a "+" in the file name`)
+          setModalOcrError(true)
+          break;
+        }
         formData.append("files", selectedFiles[i]);
       }
 
-      API_UploadDocument(formData, selectedFiles);
+      if (flag == false) {
+        API_UploadDocument(formData, selectedFiles);
+      }
     }
   };
 
@@ -45,6 +54,7 @@ const HomeWindow = ({
     formData: FormData,
     selectedFiles: FileList
   ) => {
+
     return await fetch(
       `http://141.45.224.114:8000/upload/${localStorage.getItem("userID")}`,
       {
