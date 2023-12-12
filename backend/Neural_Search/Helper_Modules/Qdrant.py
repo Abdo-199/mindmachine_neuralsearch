@@ -78,3 +78,20 @@ class Qdrant:
     paras_hits = self.get_hits(collection_name, search_text, paras_filter)
     relevant_para = self.get_scores(paras_hits)
     return {"relevant_doc": relevant_doc, "relevant_paragraph": relevant_para}
+  
+  def delete_doc(self, collection_name, doc_name):
+    self.qdrant_client.delete(
+    collection_name=collection_name,
+    points_selector=models.Filter(
+      should=[
+          models.FieldCondition(
+              key="name",
+              match=models.MatchValue(value=doc_name),
+          ),
+          models.FieldCondition(
+              key="source_doc",
+              match=models.MatchValue(value=doc_name),
+          ),
+      ],
+    ),
+    )
