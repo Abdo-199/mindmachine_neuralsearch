@@ -3,16 +3,13 @@ from fastapi.responses import FileResponse
 from fileSystemHandler import FileSystemHandler
 from statisticsHandler import StatisticsHandler
 from ldap3 import Server, Connection
-from Neural_Search.Helper_Modules.Qdrant import Qdrant
+from Neural_Search.Qdrant import Qdrant
 from dataDefinitions import *
-from database import log_search
+
 from typing import List
+from databaseHandler import DatabaseHandler
 import config
 
-
-class VectorModel(BaseModel):
-
-    pass
 
 
 class API:
@@ -21,6 +18,7 @@ class API:
         self.app = FastAPI()
         self.router = APIRouter()
         self.qdClient = Qdrant()
+        self.DatabaseHandler = DatabaseHandler(config.data_directory, config.database_name)
         self.stats = StatisticsHandler(self.qdClient)
         self.file_system_handler = FileSystemHandler(self.qdClient)
         self.setup_routes()
@@ -32,6 +30,11 @@ class API:
         @self.router.post("/login")
         async def validate_credentials(request: LoginRequestModel) -> LoginResponseModel:
 
+            user = self.DatabaseHandler.get_user(request.username )
+            if user is None:
+                self.DatabaseHandler.add_user(request.username, "Where to get name?", "Where to get E-Mail?", False)
+                user = self.DatabaseHandler.get_user(request.username)
+            
             ldap_server = Server(config.ldap_server)
             base_dn = config.base_dn
             username = f'cn={request.username},ou=idmusers,' + base_dn
@@ -40,8 +43,12 @@ class API:
             conn.start_tls()
 
             if conn.bind():
-                return LoginResponseModel(isAuthenticated=True, isAdmin=True)
-          
+                is_admin = self.DatabaseHandler.check_for_Admin(user)
+                if is_admin:
+                    return LoginResponseModel(isAuthenticated=True, isAdmin=True)
+                else:
+                    return LoginResponseModel(isAuthenticated=True, isAdmin=False)
+                       
             return LoginResponseModel(isAuthenticated=False, isAdmin=False)
         
         #search
