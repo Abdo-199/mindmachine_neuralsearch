@@ -33,10 +33,12 @@ const SearchHistory = () => {
 
   const [data, setData] = useState(searchEntries);
 
+  // TODO trigger a search that leads to the SearchResultPage
   const Search = (name: any) => {
     alert("searching for " + name);
   };
 
+  // TODO delete a search history entry
   const Delete = (name: any) => {
     setData(data.filter((entry) => entry.name !== name));
   };

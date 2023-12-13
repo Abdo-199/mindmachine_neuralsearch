@@ -1,4 +1,3 @@
-import { MouseEventHandler, useState } from "react";
 import "../../styles/SearchHistory/SearchHistory.css";
 
 interface SearchRowProps {
