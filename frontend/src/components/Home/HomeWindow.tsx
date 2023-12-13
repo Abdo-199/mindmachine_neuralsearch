@@ -43,7 +43,7 @@ const HomeWindow = ({
         if (selectedFiles[i].name.includes("+")) {
           flag = true;
           setModalOcrErrorMessage(
-            `File \"${selectedFiles[i].name}\" could not be uploaded. There is a "+" in the file name`
+            `File \"${selectedFiles[i].name}\" could not be uploaded. There is a "+" in the file name. `
           );
           setModalOcrError(true);
           break;
@@ -75,14 +75,13 @@ const HomeWindow = ({
         // boolean values indicating success or failure of uploaded files
         let responses: boolean[] = [];
         for (let i = 0; i < response.length; i++) {
-          
           const errorStatus = response[i][1];
           responses.push(errorStatus);
 
           if (response[i][1] == false) {
             setModalOcrErrorMessage(
               (prevState) =>
-                prevState + `File \"${response[i][0]}\" could not be uploaded.`
+                prevState + `File \"${response[i][0]}\" could not be uploaded. `
             );
             error = true;
           }
@@ -96,16 +95,16 @@ const HomeWindow = ({
           setShowUploadIcons(false);
         }, 5000); // 5000 Millisekunden entsprechen 5 Sekunden
 
-        // if (error == true) {
-        //   setModalOcrError(true);
-        // } else {
-        //   // show an upload-OK icon
-        //   setShowUploadIcons(true);
-        //   // remove the icon after 5 seconds after showing
-        //   setTimeout(() => {
-        //     setShowUploadIcons(false);
-        //   }, 5000); // 5000 Millisekunden entsprechen 5 Sekunden
-        // }
+        if (error == true) {
+          setModalOcrError(true);
+        }
+
+        // show an upload-OK icon
+        setShowUploadIcons(true);
+        // remove the icon after 5 seconds after showing
+        setTimeout(() => {
+          setShowUploadIcons(false);
+        }, 20000); // 5000 Millisekunden entsprechen 5 Sekunden
 
         GetFileStructure();
       });
@@ -127,7 +126,7 @@ const HomeWindow = ({
         </label>
 
         {showUploadIcons
-          ? uploadResponses.map((status, i) => {
+          ? uploadResponses.map((status) => {
               return status ? (
                 <FontAwesomeIcon id="upload-check-icon" icon={faCircleCheck} />
               ) : (
@@ -153,14 +152,20 @@ const HomeWindow = ({
               <div className="renameFileOptions-buttons">
                 <button
                   className="fileOption-button"
-                  onClick={() => setModalOcrError(false)}
+                  onClick={() => {
+                    setModalOcrError(false);
+                    setModalOcrErrorMessage("");
+                  }}
                 >
                   OK
                 </button>
               </div>
             </div>
           }
-          closeModal={() => setModalOcrError(false)}
+          closeModal={() => {
+            setModalOcrError(false);
+            setModalOcrErrorMessage("");
+          }}
         ></Modal>
       ) : null}
     </div>
