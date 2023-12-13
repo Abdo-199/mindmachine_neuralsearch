@@ -59,8 +59,7 @@ const SearchResult = () => {
           }}
         >
           <CardContent style={{ minHeight: 200 }}>
-            <h3 style={{ color: "black" }}>Searchear Result</h3>
-            <iframe
+              <iframe
               title="pdf-viewer"
               width={"100%"}
               height={"700"}
