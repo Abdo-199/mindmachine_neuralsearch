@@ -55,3 +55,6 @@ docs/_build/
 # Binary files
 *.DS_Store
 *.db
+
+# notebook
+*.ipynb

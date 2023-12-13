@@ -118,15 +118,17 @@ class Qdrant:
     """
     max_score_value = -1
     max_score_value_indoc = None
+    score_values_indoc = []
     for hit in hits:
         # print(hit.payload, "score:", hit.score)
+        score_values_indoc.append(hit.payload["name"])
         if hit.score > max_score_value:
             max_score_value = hit.score
             max_score_value_indoc = hit.payload
-    print(max_score_value)
+    # print(max_score_value)
     if max_score_value_indoc is not None:
         # print("The Vector with the highst score:", max_score_value_indoc["name"])
-        return max_score_value_indoc["name"]
+        return score_values_indoc
     else:
         # print("No vector")
         return "none"
@@ -140,17 +142,18 @@ class Qdrant:
     - search_text (str): Text to search for.
 
     Returns:
-    dict: {"relevant_doc": relevant_doc, "relevant_paragraph": relevant_para}.
+    a list of the most relevant 4 docs. And the most 4 relevant paragraphs by the most relevant doc.
+    dict: {"relevant_docs": relevant_doc, "relevant_paragraph": relevant_para}.
     """
 
     docs_filter = Filter(must=[FieldCondition(key="isDoc", match=MatchValue(value=True))])
     docs_hits = self.get_hits(collection_name, search_text, docs_filter)
-    relevant_doc = self.get_scores(docs_hits)
+    relevant_docs = self.get_scores(docs_hits)
 
-    paras_filter = Filter(must=[FieldCondition(key="source_doc", match=MatchValue(value=relevant_doc))])
+    paras_filter = Filter(must=[FieldCondition(key="source_doc", match=MatchValue(value=relevant_docs[0]))])
     paras_hits = self.get_hits(collection_name, search_text, paras_filter)
     relevant_para = self.get_scores(paras_hits)
-    return {"relevant_doc": relevant_doc, "relevant_paragraph": relevant_para}
+    return {"relevant_docs": relevant_docs[:4], "relevant_paragraphs": relevant_para[:4]}
   
   def delete_doc(self, collection_name, doc_name):
     self.qdrant_client.delete(
