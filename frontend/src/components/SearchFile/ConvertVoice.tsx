@@ -29,7 +29,7 @@ const ConvertVoice = () => {
 
   const API_Search = async () => {
     return await fetch(
-      `http://141.45.224.114:8000/search?user_id=${localStorage.getItem("userID")}&query=${transcriptText}`,
+      `${process.env.REACT_APP_address}/search?user_id=${localStorage.getItem("userID")}&query=${transcriptText}`,
       {
         method: "GET",
         headers: {

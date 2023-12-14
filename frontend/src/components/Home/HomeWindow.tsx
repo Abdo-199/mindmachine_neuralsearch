@@ -56,7 +56,7 @@ const HomeWindow = ({
   ) => {
 
     return await fetch(
-      `http://141.45.224.114:8000/upload/${localStorage.getItem("userID")}`,
+      `${process.env.REACT_APP_address}/upload/${localStorage.getItem("userID")}`,
       {
         method: "POST",
         mode: "cors",

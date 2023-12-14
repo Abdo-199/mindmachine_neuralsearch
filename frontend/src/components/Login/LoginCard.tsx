@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const LoginCard = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  console.log(`${process.env.REACT_APP_address}/login`);
   
   const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ const LoginCard = () => {
       },
     };
 
-    const url = `http://${process.env.REACT_APP_address}/login`;
+    const url = `${process.env.REACT_APP_address}/login`;
     const response = await fetch(url, fetchData)
       .then((response) => {
         return response.json();

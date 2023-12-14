@@ -98,7 +98,7 @@ const FileOptions = ({
   const API_GetDocument = async () => {
     const user_id = localStorage.getItem("userID");
 
-    const fetchString = `http://141.45.224.114:8000/document?user_id=${user_id}&document_name=${filename}`;
+    const fetchString = `${process.env.REACT_APP_address}/document?user_id=${user_id}&document_name=${filename}`;
     return await fetch(fetchString, {
       method: "GET",
     }).then(async (res) => {
@@ -114,7 +114,7 @@ const FileOptions = ({
   // send delete request to backend
   const API_DeleteDocument = async () => {
     return await fetch(
-      `http://141.45.224.114:8000/deleteDocument/${localStorage.getItem(
+      `${process.env.REACT_APP_address}/deleteDocument/${localStorage.getItem(
         "userID"
       )}/${filename}`,
       {
@@ -133,7 +133,7 @@ const FileOptions = ({
   // send rename request to backend
   const API_EditDocumentName = async () => {
     return await fetch(
-      `http://141.45.224.114:8000/editDocumentName/${localStorage.getItem(
+      `${process.env.REACT_APP_address}/editDocumentName/${localStorage.getItem(
         "userID"
       )}`,
       {
