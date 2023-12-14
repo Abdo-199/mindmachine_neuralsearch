@@ -5,7 +5,7 @@ import FileOptions from "./FileOptions";
 import FileInfosCard from "./FileInfosCard";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Modal from "../Others/Modal";
+import DeleteFileConfirmModal from "../Others/DeleteFileConfirmModal";
 
 const FileInformationWindow = ({
   docRows,
@@ -41,7 +41,6 @@ const FileInformationWindow = ({
   // Funktion zum Suchen und Setzen des gefundenen Objekts
   const SearchAndSetObject = () => {
     const foundItem = docRows.find((item) => item.file_name === filenameParams);
-    console.log(modalHandlerDeleteConfirm);
 
     if (foundItem) {
       SetThisFile(foundItem);
@@ -62,7 +61,6 @@ const FileInformationWindow = ({
           ></FileInfosCard>
           {thisFile && (
             <FileOptions
-              modalHandlerDeleteConfirm={modalHandlerDeleteConfirm}
               ModalHandlerDeleteConfirm={ModalHandlerDeleteConfirm}
               filename={thisFile.file_name}
               SetThisFile={SetThisFile}
@@ -71,32 +69,12 @@ const FileInformationWindow = ({
             ></FileOptions>
           )}
           {modalHandlerDeleteConfirm ? (
-            <Modal
-              header={"Deleting a File"}
-              content={
-                <div>
-                  <hr className="hr-style"></hr>
-                  <div>
-                    <span>File has been deleted successfully.</span>
-                  </div>
-                  <br></br>
-                  <hr className="hr-style"></hr>
-                  <button
-                    className="fileOption-button"
-                    onClick={() => {
-                      ModalHandlerDeleteConfirm();
-                      navigate("/MainWindow");
-                    }}
-                  >
-                    OK
-                  </button>
-                </div>
-              }
+            <DeleteFileConfirmModal
               closeModal={() => {
                 ModalHandlerDeleteConfirm();
                 navigate("/MainWindow");
               }}
-            ></Modal>
+            ></DeleteFileConfirmModal>
           ) : null}
         </div>
       </div>

@@ -1,20 +1,30 @@
-import React from "react";
+import { useEffect } from "react";
 import "../../styles/Others/Modal.css";
 import Modal from "../Others/Modal";
 
 const DeleteFileModal = ({
   DeleteFile,
-  isConfirmed,
-  SetIsConfirmed,
   filename,
   closeModal,
 }: {
   DeleteFile: any;
-  isConfirmed: boolean;
-  SetIsConfirmed: any;
   filename: string | undefined;
   closeModal: any;
 }) => {
+  // let user cancel delete process with escape key
+  const handleKeyDown = (event: any) => {
+    if (event.key == "Escape") {
+      closeModal();
+    }
+  };
+
+  // listen for keydown events for this component only
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <Modal
@@ -22,33 +32,22 @@ const DeleteFileModal = ({
       content={
         <>
           <hr className="hr-style"></hr>
-          {isConfirmed ? (
-            <>
-              <span>"{filename}" is deleted successfully.</span>
+          <div>
+            <span>Do you want to delete the file: {filename}?</span>
+            <hr className="hr-style"></hr>
+            <div className="renameFileOptions-buttons">
+              <button className="fileOption-button" onClick={closeModal}>
+                Cancel
+              </button>
               <button
+                autoFocus
                 className="fileOption-button"
-                onClick={() => {
-                    closeModal();
-                    SetIsConfirmed(false);
-                }}
+                onClick={DeleteFile}
               >
                 OK
               </button>
-            </>
-          ) : (
-            <div>
-              <span>Do you want to delete the file: {filename}?</span>
-              <hr className="hr-style"></hr>
-              <div className="renameFileOptions-buttons">
-                <button className="fileOption-button" onClick={closeModal}>
-                  Cancel
-                </button>
-                <button className="fileOption-button" onClick={DeleteFile}>
-                  OK
-                </button>
-              </div>
             </div>
-          )}
+          </div>
         </>
       }
       closeModal={closeModal}
