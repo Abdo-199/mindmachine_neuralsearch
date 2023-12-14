@@ -1,7 +1,8 @@
-import React from 'react'
-import Header from '../Misc/Header'
+import React from "react";
+import Header from "../Misc/Header";
 import { useState } from "react";
-import "../../styles/SearchHistory/SearchHistory.css"
+import "../../styles/SearchHistory/SearchHistory.css";
+import SearchRow from "./SearchRow";
 
 // Dummy Daten für Such-Einträge
 let names = [
@@ -31,14 +32,16 @@ let searchEntries = [
 const SearchHistory = () => {
 
   const [data, setData] = useState(searchEntries);
-  
-  const Search = () => {
 
-  }
+  // TODO trigger a search that leads to the SearchResultPage
+  const Search = (name: any) => {
+    alert("searching for " + name);
+  };
 
-  const Delete = () => {
-
-  }
+  // TODO delete a search history entry
+  const Delete = (name: any) => {
+    setData(data.filter((entry) => entry.name !== name));
+  };
 
   return (
     <>
@@ -46,16 +49,7 @@ const SearchHistory = () => {
       <div className="searchHistoryContainer">
         <table>
           {data.map((entry, index) => (
-            <tr key={index}>
-              <td>{entry.name}</td>
-              <td>{entry.createdOn}</td>
-              <td>
-                <button onClick={() => Search()}>Search</button>
-              </td>
-              <td>
-                <button onClick={() => Delete()}>Delete</button>
-              </td>
-            </tr>
+            <SearchRow key={index} name={entry.name} createdOn={entry.createdOn} Search={Search} Delete={Delete}></SearchRow>
           ))}
         </table>
       </div>
