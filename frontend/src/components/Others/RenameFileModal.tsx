@@ -17,6 +17,13 @@ const RenameFileModal = ({
   SetNewFilename: any;
   closeModal: any;
 }) => {
+  // let user rename file with enter key
+  const FastRename = (e: any) => {
+    if (e.key === "Enter") {
+      RenameFile();
+    }
+  };
+
   return (
     <Modal
       header={"Renaming a File"}
@@ -50,7 +57,9 @@ const RenameFileModal = ({
                 <span>
                   New Filename:{" "}
                   <input
+                    autoFocus
                     onChange={(e) => SetNewFilename(e.target.value + ".pdf")}
+                    onKeyDown={(e) => FastRename(e)}
                   ></input>{" "}
                   .pdf
                 </span>
