@@ -22,8 +22,14 @@ FROM nginx:latest
 # Copy the production-ready React app from the build stage to the nginx document root
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Copy custom Nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy the SSL certificate and key
+COPY ssl_certs/ /etc/nginx/ssl/
+
 # Expose the port that nginx will listen on (usually 80)
-EXPOSE 80
+EXPOSE 80 443
 
 # Define the command to start nginx (it will start automatically)
 CMD ["nginx", "-g", "daemon off;"]
