@@ -59,11 +59,7 @@ class API:
                 # Perform the search using Qdrant
                 results = self.qdClient.search(user_id, query)
 
-                # TODO: return wert/objekt mit frontend abstimmen
-
-                # TODO: Automate the table creation
-                # Log the search in the database
-                # log_search(student_number, query) 
+                self.DatabaseHandler.log_search(user_id, query) 
 
                 return results
             except Exception as e:
