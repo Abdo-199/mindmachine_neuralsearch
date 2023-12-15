@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RenameFileModal from "../Others/RenameFileModal";
 import DeleteFileModal from "../Others/DeleteFileModal";
 import "../../styles/FileInformation/FileInformation.css";
@@ -10,6 +10,7 @@ const FileOptions = ({
   SetDocRows,
   modalHandlerDeleteConfirm,
   ModalHandlerDeleteConfirm,
+  fileAlreadyOpen
 }: {
   modalHandlerDeleteConfirm: boolean;
   ModalHandlerDeleteConfirm: any;
@@ -17,7 +18,9 @@ const FileOptions = ({
   SetThisFile: any;
   docRows: any[];
   SetDocRows: any;
+  fileAlreadyOpen: string
 }) => {
+
   function checkFilename(
     inputString: string,
     forbiddenCharacters: RegExp
@@ -34,6 +37,12 @@ const FileOptions = ({
   const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
 
   const [isConfirmed, SetIsConfirmed] = useState(false);
+
+  useEffect(() => {
+    if (fileAlreadyOpen == "true") {
+      OpenFile()
+    }
+  }, [])
 
   // open and close dialog for renaming a file
   const ModalHandlerDataChange = () => {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import HomeWindow from '../Home/HomeWindow'
-
 import '../../styles/Misc/MainWindow.css'
 import LegalNotice from './LegalNotice';
 import SearchHistory from '../SearchHistory/SearchHistory';
@@ -10,6 +9,7 @@ import SearchResult from '../SearchResult/SearchResult';
 import AdminPanel from '../AdminPanel/AdminPanel';
 import FileInformationWindow from '../FileInformation/FileInformationWindow'
 import { useNavigate } from "react-router-dom";
+import { SearchResultProvider } from '../SearchResult/SearchResultContext';
 
 interface MainWindowProps {
   content: string;
@@ -21,6 +21,7 @@ const MainWindow: React.FC<MainWindowProps> = ({ content }) => {
 
   // Liste aller Dateien (noch nicht user-spezifisch)
   const [docRows, SetDocRows] = useState<any[]>([]);
+  const [searchResult, setSearchResult] = useState({});
 
   useEffect(() => {
     if (localStorage.getItem("userID") == null || localStorage.getItem("isAdmin") == null) {
@@ -57,7 +58,9 @@ return (
     <div id="mainWindow-container">
       <Header></Header>
       <div id="mainContent">
-        {toRenderContent}
+        <SearchResultProvider>
+          {toRenderContent}
+        </SearchResultProvider>
       </div>
       <Footer></Footer>
     </div>
