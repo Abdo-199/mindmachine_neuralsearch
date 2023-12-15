@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,13 @@ import SpeechRecognition, {
 const ConvertVoice = () => {
   
   const navigate = useNavigate();
+
+  useEffect(()=>{
+      const init = ()=>{
+        stopListening()
+      }
+      init()
+  }, [])
 
   const {
     transcript,
@@ -39,10 +46,10 @@ const ConvertVoice = () => {
       .then((res) => res.json())
       .then((response) => {
         console.log(response)
-        //navigate("/SearchResult")
+        localStorage.setItem("fileName", response?.relevant_doc.toString() )
+         navigate("/SearchResult")
       });
   };
-
   return (
     <>
       <input id="searchInput" value={listening?transcript : transcriptText} onChange={(e)=>{
