@@ -1,4 +1,3 @@
-import { configDotenv } from "dotenv";
 import "../../styles/Login/LoginStyles.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 const LoginCard = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  
   const navigate = useNavigate();
 
+  // send login requst to backend and inform user of success or error
   const Login = async (username: string, password: string) => {
     let bodyData = { username: username, password: password };
 
@@ -19,9 +19,8 @@ const LoginCard = () => {
         "Content-Type": "application/json",
       },
     };
-    
-    //${process.env.backend_address}/login
-    const url = `http://141.45.224.114:8000/login`;
+
+    const url = `${process.env.REACT_APP_production_address}/login`;
     const response = await fetch(url, fetchData)
       .then((response) => {
         return response.json();
@@ -32,9 +31,12 @@ const LoginCard = () => {
         } else {
           localStorage.setItem("userID", username);
           localStorage.setItem("isAdmin", data.isAdmin);
-          sessionStorage.setItem("login_datum", new Date().getTime().toString());
+          sessionStorage.setItem(
+            "login_datum",
+            new Date().getTime().toString()
+          );
 
-          //Weiterleitung zu MainWindow
+          // navigate back to MainWindow
           navigate("/MainWindow");
         }
       })
@@ -43,19 +45,18 @@ const LoginCard = () => {
       });
   };
 
-  const FastLogin = (e: any) =>{
+  // let user login with enter key
+  const FastLogin = (e: any) => {
     if (e.key === "Enter") {
       Login(username, password);
     }
-  }
+  };
 
   return (
-    // Username input, password input, ... on a card
     <div className="loginContainer">
       <img
         id="login-pic"
         className="avatar"
-        // put in a much cooler logo for our web-app maybe?
         src="mindmachine_logo.png"
         alt="avatar"
         width={100}
