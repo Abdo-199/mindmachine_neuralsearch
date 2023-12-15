@@ -13,34 +13,9 @@ import { useSearchResult } from './SearchResultContext';
 import MostRelevantDoc from "./MostRelevantDoc";
 import RelevantDoc from "./RelevantDoc";
 
-// interface SearchResult {
-//   relevant_docs: [],
-//   relevent_paragraphs: [];
-//   // Andere Eigenschaften von SearchResult
-// }
-
 const SearchResult = () => {
   const [fileBlob, setFileBlob] = useState("");
   const { searchResult, setSearchResult } = useSearchResult();
-
-  useEffect(() => {
-
-    console.log(searchResult)
-    // const API_GetDocument = async () => {
-    //   const user_id = localStorage.getItem("userID");
-    //   const filename = "Dok1";
-
-    //   const fetchString = `${process.env.REACT_APP_production_address}/document?user_id=${user_id}&document_name=${filename}`
-    //   return await fetch(fetchString, {
-    //     method: "GET",
-    //   }).then(async (res) => {
-    //     const blob = await res.blob();
-    //     const pdfUrl = URL.createObjectURL(blob);
-    //     setFileBlob(pdfUrl);
-    //   });
-    // };
-    // API_GetDocument()
-  }, []);
 
   return (
     <div id="searchResult-container">
