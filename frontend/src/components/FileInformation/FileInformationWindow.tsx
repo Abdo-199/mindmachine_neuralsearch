@@ -6,6 +6,7 @@ import FileInfosCard from "./FileInfosCard";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../Others/Modal";
+import OpenFile from "../SearchResult/OpenFile";
 
 const FileInformationWindow = ({
   docRows,
@@ -14,7 +15,7 @@ const FileInformationWindow = ({
   docRows: any[];
   SetDocRows: any;
 }) => {
-  const { filenameParams } = useParams() as { filenameParams: string };
+  const { filenameParams, fileAlreadyOpen } = useParams() as { filenameParams: string, fileAlreadyOpen: string };
 
   type FileObject = {
     file_name: string;
@@ -68,6 +69,7 @@ const FileInformationWindow = ({
               SetThisFile={SetThisFile}
               docRows={docRows}
               SetDocRows={SetDocRows}
+              fileAlreadyOpen={fileAlreadyOpen}
             ></FileOptions>
           )}
           {modalHandlerDeleteConfirm ? (
