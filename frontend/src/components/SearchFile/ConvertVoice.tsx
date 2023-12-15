@@ -1,20 +1,22 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import { useSearchResult } from '../SearchResult/SearchResultContext';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
 const ConvertVoice = () => {
-  
-  const navigate = useNavigate();
 
-  useEffect(()=>{
-      const init = ()=>{
-        stopListening()
-      }
-      init()
+  const navigate = useNavigate();
+  const { searchResult, setSearchResult } = useSearchResult();
+
+  useEffect(() => {
+    const init = () => {
+      stopListening()
+    }
+    init()
   }, [])
 
   const {
@@ -52,18 +54,17 @@ const ConvertVoice = () => {
       })
       .then((res) => res.json())
       .then((response) => {
-        console.log(response)
-        localStorage.setItem("fileName", response?.relevant_doc.toString() )
-         navigate("/SearchResult")
+        setSearchResult(response)
+        navigate("/SearchResult")
       });
   };
   return (
     <>
-      <input onKeyDown={(e) => FastSearch(e)} id="searchInput" value={listening?transcript : transcriptText} onChange={(e)=>{
+      <input onKeyDown={(e) => FastSearch(e)} id="searchInput" value={listening ? transcript : transcriptText} onChange={(e)=>{
         setTranscriptText(e.target.value)
       }} placeholder="Start a search"></input>
 
-      <button id="searchButton" style={{fontSize: "1.3rem"}} onClick={() => API_Search()}>Search</button>
+      <button id="searchButton" style={{ fontSize: "1.3rem" }} onClick={() => API_Search()}>Search</button>
 
       {listening ? (
         <button id="micButton" style={{ backgroundColor: "red" }}>
