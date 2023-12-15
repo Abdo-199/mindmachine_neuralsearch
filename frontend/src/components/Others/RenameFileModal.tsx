@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../styles/Others/Modal.css";
 import Modal from "../Others/Modal";
 
@@ -17,6 +17,34 @@ const RenameFileModal = ({
   SetNewFilename: any;
   closeModal: any;
 }) => {
+  // let user cancel rename process with escape key
+  const handleKeyDown = (event: any) => {
+    // close all modals
+    if (event.key == "Escape") {
+      SetIsConfirmed(false);
+      closeModal();
+    }
+  };
+
+  // listen for keydown events for this component only
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  // let user rename file with enter key
+  const FastRename = (e: any) => {
+    if (e.key === "Enter") {
+      // wait quarter of second
+      // fix for confirm-message dissapearing quickly, because of first enter hit -> better way of solving this problem?
+      setTimeout(() => {
+        RenameFile();
+      }, 250);
+    }
+  };
+
   return (
     <Modal
       header={"Renaming a File"}
@@ -26,10 +54,11 @@ const RenameFileModal = ({
           <hr className="hr-style"></hr>
           {isConfirmed ? (
             <>
-              <div>File is renamed successfull to "{filename}".</div>
+              <div>File is renamed successfully to "{filename}".</div>
               <hr className="hr-style"></hr>
               <div className="renameFileOptions-buttons">
                 <button
+                  autoFocus
                   className="fileOption-button"
                   onClick={() => {
                     SetIsConfirmed(false);
@@ -50,7 +79,9 @@ const RenameFileModal = ({
                 <span>
                   New Filename:{" "}
                   <input
+                    autoFocus
                     onChange={(e) => SetNewFilename(e.target.value + ".pdf")}
+                    onKeyDown={(e) => FastRename(e)}
                   ></input>{" "}
                   .pdf
                 </span>
@@ -58,10 +89,16 @@ const RenameFileModal = ({
               <br></br>
               <hr className="hr-style"></hr>
               <div className="renameFileOptions-buttons">
-                <button className="fileOption-button" onClick={closeModal}>
+                <button
+                  className="fileOption-button"
+                  onClick={closeModal}
+                >
                   Cancel
                 </button>
-                <button className="fileOption-button" onClick={RenameFile}>
+                <button
+                  className="fileOption-button"
+                  onClick={RenameFile}
+                >
                   Save
                 </button>
               </div>

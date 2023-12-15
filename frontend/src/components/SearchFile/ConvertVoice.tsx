@@ -36,6 +36,13 @@ const ConvertVoice = () => {
     await SpeechRecognition.stopListening();
   }
 
+  // let user search with enter key
+  const FastSearch = (e: any) => {
+    if (e.key === "Enter") {
+      API_Search();
+    }
+  };
+
   const API_Search = async () => {
     return await fetch(
       `${process.env.REACT_APP_production_address}/search?user_id=${localStorage.getItem("userID")}&query=${transcriptText}`,
@@ -53,7 +60,7 @@ const ConvertVoice = () => {
   };
   return (
     <>
-      <input id="searchInput" value={listening ? transcript : transcriptText} onChange={(e) => {
+      <input onKeyDown={(e) => FastSearch(e)} id="searchInput" value={listening ? transcript : transcriptText} onChange={(e)=>{
         setTranscriptText(e.target.value)
       }} placeholder="Start a search"></input>
 

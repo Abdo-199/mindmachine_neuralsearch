@@ -8,17 +8,15 @@ const FileOptions = ({
   SetThisFile,
   docRows,
   SetDocRows,
-  modalHandlerDeleteConfirm,
   ModalHandlerDeleteConfirm,
   fileAlreadyOpen
 }: {
-  modalHandlerDeleteConfirm: boolean;
-  ModalHandlerDeleteConfirm: any;
   filename: string;
   SetThisFile: any;
   docRows: any[];
   SetDocRows: any;
   fileAlreadyOpen: string
+  ModalHandlerDeleteConfirm: any;
 }) => {
 
   function checkFilename(
@@ -96,7 +94,6 @@ const FileOptions = ({
     if (fileFound) {
       SetThisFile(null);
       API_DeleteDocument();
-      SetIsConfirmed(true);
       ModalHandlerDeleteConfirm();
     } else {
       alert("Error. There was a problem.");
@@ -113,9 +110,6 @@ const FileOptions = ({
     }).then(async (res) => {
       const blob = await res.blob();
       const pdfUrl = URL.createObjectURL(blob);
-      console.log(blob);
-      console.log(pdfUrl);
-      console.log(filename);
       setPDFURL(pdfUrl);
     });
   };
@@ -195,8 +189,6 @@ const FileOptions = ({
       {modalHandlerDataDelete ? (
         <DeleteFileModal
           DeleteFile={DeleteFile}
-          isConfirmed={isConfirmed}
-          SetIsConfirmed={SetIsConfirmed}
           filename={filename}
           closeModal={ModalHandlerDataDelete}
         ></DeleteFileModal>
