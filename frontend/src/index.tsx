@@ -22,7 +22,7 @@ const RouteLayout = () => (
       <Route path="/" element={<LoginWindow />} />
       <Route path="/MainWindow" element={<MainWindow content='HomeWindow' />} />
       <Route path="/AdminPanel" element={<MainWindow content='AdminPanel' />} />
-      <Route path="/SearchResult" element={<MainWindow content='SearchResult' />} />
+      <Route path="/SearchResult/:query" element={<MainWindow content='SearchResult' />} />
       <Route path="/SearchHistory" element={<MainWindow content='SearchHistory' />} />
       <Route path="/FileInformation/:filenameParams/:fileAlreadyOpen" element={<MainWindow content='FileInformation' />} />
       <Route path="/LegalNotice" element={<MainWindow content='LegalNotice' />} />
