@@ -26,7 +26,7 @@ const SearchResult = () => {
       </Alert>
 
       <MostRelevantDoc></MostRelevantDoc>
-
+      
       {searchResult.relevant_docs.map((item: string, index: number) => {
 
         if (index !== 0) {
