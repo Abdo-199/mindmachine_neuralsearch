@@ -4,7 +4,10 @@ import SearchInput from "./SearchInput";
 import DocumentList from "./DocumentList";
 import Modal from "../Others/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleCheck,
+  faCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 const HomeWindow = ({
   docRows,
@@ -15,10 +18,12 @@ const HomeWindow = ({
   SetDocRows: any;
   GetFileStructure: () => void;
 }) => {
-
   const [modalOcrError, setModalOcrError] = useState(false);
   const [modalOcrErrorMessage, setModalOcrErrorMessage] = useState("");
-  const [showCheckIcon, setShowCheckIcon] = useState(false);
+  // display icons indicating status of uploaded file(s)
+  const [showUploadIcons, setShowUploadIcons] = useState(false);
+  // values indicating whether file is uploaded successfully or not
+  const [uploadResponses, setUploadResponses] = useState<boolean[]>([]);
 
   useEffect(() => {
     GetFileStructure();
@@ -29,7 +34,7 @@ const HomeWindow = ({
 
     const selectedFiles = event.target.files;
 
-    let flag:boolean = false;
+    let flag: boolean = false;
 
     if (selectedFiles) {
       const formData = new FormData();
@@ -37,8 +42,10 @@ const HomeWindow = ({
       for (let i = 0; i < selectedFiles.length; i++) {
         if (selectedFiles[i].name.includes("+")) {
           flag = true;
-          setModalOcrErrorMessage(`File \"${selectedFiles[i].name}\" could not be uploaded. There is a "+" in the file name`)
-          setModalOcrError(true)
+          setModalOcrErrorMessage(
+            `File \"${selectedFiles[i].name}\" could not be uploaded. There is a "+" in the file name. `
+          );
+          setModalOcrError(true);
           break;
         }
         formData.append("files", selectedFiles[i]);
@@ -54,7 +61,6 @@ const HomeWindow = ({
     formData: FormData,
     selectedFiles: FileList
   ) => {
-
     return await fetch(
       `${process.env.REACT_APP_production_address}/upload/${localStorage.getItem("userID")}`,
       {
@@ -65,24 +71,32 @@ const HomeWindow = ({
     )
       .then((res) => res.json())
       .then((response) => {
-        console.log(response)
-
-        let error:boolean = false;
+        let error: boolean = false;
+        // boolean values indicating success or failure of uploaded files
+        let responses: boolean[] = [];
         for (let i = 0; i < response.length; i++) {
+          const errorStatus = response[i][1];
+          responses.push(errorStatus);
+
           if (response[i][1] == false) {
-            setModalOcrErrorMessage(prevState => prevState + `File \"${response[i][0]}\" could not be uploaded.`)
+            setModalOcrErrorMessage(
+              (prevState) =>
+                prevState + `File \"${response[i][0]}\" could not be uploaded. `
+            );
             error = true;
           }
         }
 
+        setUploadResponses(responses);
+        // start displaying status icons
+        setShowUploadIcons(true);
+        // remove the icon 5 seconds after displaying them
+        setTimeout(() => {
+          setShowUploadIcons(false);
+        }, 10000); // 5000 Millisekunden entsprechen 5 Sekunden
+
         if (error == true) {
-          setModalOcrError(true)
-        }
-        else {
-          setShowCheckIcon(true)
-          setTimeout(() => {
-            setShowCheckIcon(false)
-          }, 5000); // 5000 Millisekunden entsprechen 5 Sekunden
+          setModalOcrError(true);
         }
 
         GetFileStructure();
@@ -103,7 +117,16 @@ const HomeWindow = ({
           />
           Add new files
         </label>
-    	  {showCheckIcon ? <FontAwesomeIcon id="upload-check-icon" icon={faCircleCheck}/> : null}
+
+        {showUploadIcons
+          ? uploadResponses.map((status) => {
+              return status ? (
+                <FontAwesomeIcon id="upload-check-icon" icon={faCircleCheck} />
+              ) : (
+                <FontAwesomeIcon id="upload-cross-icon" icon={faCircleXmark} />
+              );
+            })
+          : null}
       </div>
 
       <DocumentList docRows={docRows}></DocumentList>
@@ -122,13 +145,20 @@ const HomeWindow = ({
               <div className="renameFileOptions-buttons">
                 <button
                   className="fileOption-button"
-                  onClick={() => setModalOcrError(false)}>
+                  onClick={() => {
+                    setModalOcrError(false);
+                    setModalOcrErrorMessage("");
+                  }}
+                >
                   OK
                 </button>
               </div>
             </div>
           }
-          closeModal={() => setModalOcrError(false)}
+          closeModal={() => {
+            setModalOcrError(false);
+            setModalOcrErrorMessage("");
+          }}
         ></Modal>
       ) : null}
     </div>
