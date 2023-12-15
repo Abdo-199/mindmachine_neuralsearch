@@ -29,7 +29,7 @@ const MainWindow: React.FC<MainWindowProps> = ({ content }) => {
   }, [])
 
 const GetFileStructure = async () => {
-  return await fetch(`http://141.45.224.114:8000/filestructure/${localStorage.getItem("userID")}`, {
+  return await fetch(`${process.env.REACT_APP_production_address}/filestructure/${localStorage.getItem("userID")}`, {
     method: 'GET',
     mode: "cors",
     cache: "no-cache",
