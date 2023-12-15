@@ -93,18 +93,11 @@ const HomeWindow = ({
         // remove the icon 5 seconds after displaying them
         setTimeout(() => {
           setShowUploadIcons(false);
-        }, 5000); // 5000 Millisekunden entsprechen 5 Sekunden
+        }, 10000); // 5000 Millisekunden entsprechen 5 Sekunden
 
         if (error == true) {
           setModalOcrError(true);
         }
-
-        // show an upload-OK icon
-        setShowUploadIcons(true);
-        // remove the icon after 5 seconds after showing
-        setTimeout(() => {
-          setShowUploadIcons(false);
-        }, 20000); // 5000 Millisekunden entsprechen 5 Sekunden
 
         GetFileStructure();
       });
