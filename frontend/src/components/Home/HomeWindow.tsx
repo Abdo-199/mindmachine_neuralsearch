@@ -133,7 +133,7 @@ const HomeWindow = ({
 
       {modalOcrError ? (
         <Modal
-          header={"Fehler"}
+          header={"Error"}
           content={
             <div>
               <hr className="hr-style"></hr>

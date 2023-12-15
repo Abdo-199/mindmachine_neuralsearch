@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSearchResult } from './SearchResultContext';
 import OpenFile from './OpenFile';
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const MostRelevantDoc = () => {
 
@@ -14,7 +16,18 @@ const MostRelevantDoc = () => {
             <p className="doc-relevant-paragraphs">Relevant paragraphs:</p>
 
             {searchResult.relevant_paragraphs.map((item: string, index: number) => {
-                return <p>{item}</p>
+                return <div className='paragraphs'>
+                    <div style={{display: "flex", alignItems: "center", columnGap: "15px"}}>
+                        <p style={{ fontWeight: "bold"}}>Paragraph {index + 1}</p>
+                        <FontAwesomeIcon
+                            className='copy-icon'
+                            style={{ fontSize: "1.3rem" }}
+                            icon={faCopy}
+                            onClick={() => {navigator.clipboard.writeText(item)}}
+                        ></FontAwesomeIcon>
+                    </div>
+                    <p>{item}</p>
+                </div>
             })}
 
             {searchResult.relevant_paragraphs[0] == " " ? <p>No paragraphs found!</p> : null}
