@@ -55,7 +55,7 @@ const ConvertVoice = () => {
       .then((res) => res.json())
       .then((response) => {
         setSearchResult(response)
-        navigate("/SearchResult")
+        navigate(`/SearchResult/${transcriptText}`)
       });
   };
   return (
