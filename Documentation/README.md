@@ -1,5 +1,4 @@
 
-
 # 1. Projektbeschreibung: MindMachine - Projekt der HTW Berlin
 
 Die **MindMachine** ist ein innovatives Webanwendungsprojekt, das im Rahmen des Sommersemester 2023 gestarteten Masterstudiengangs "Informatik in den Ingenieurwissenschaften" an der Hochschule für Technik und Wirtschaft (HTW) Berlin entsteht. Dieses Projekt wird von Studierenden als Teil eines Moduls entwickelt, um fortgeschrittene Informatikkenntnisse in den Ingenieurwissenschaften zu fördern.
@@ -99,7 +98,11 @@ Wenn die oben genannten Schritte das Problem nicht lösen, zögere nicht, ===[un
 ---
 ## 6. Kontakt
 
-===Wie man das Projektteam erreichen kann, z.B., per E-Mail oder auf GitHub.=== #endsprint 
+SOFTENG MemoryMachine
+memorymachine.softeng@gmail.com
+Hochschule für Technik und Wirtschaft
+Campus Wilhelminenhof
+Wilhelminenhofstraße 75A, 12459 Berlin
 
 
 ---
