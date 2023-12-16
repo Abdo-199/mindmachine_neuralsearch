@@ -304,11 +304,9 @@ Dieses Epic konzentriert sich auf die Umsetzung der Funktionen rund um das Datei
 
 4. Die Benutzeroberfläche für das Öffnen von Dokumenten ist benutzerfreundlich gestaltet.
 
-5. Bei Änderungen an einem Dokument wird der Benutzer darauf hingewiesen und kann die Änderungen speichern.
+5. Falls das Dokument schreibgeschützt ist, kann der Benutzer es dennoch anzeigen.
 
-6. Falls das Dokument schreibgeschützt ist, kann der Benutzer es dennoch anzeigen.
-
-7. Die Dokumentenanzeige respektiert die Sicherheitsrichtlinien und schützt die Privatsphäre des Benutzers.
+6. Die Dokumentenanzeige respektiert die Sicherheitsrichtlinien und schützt die Privatsphäre des Benutzers.
 
 ---
 
@@ -838,7 +836,7 @@ Dieses Epic adressiert die Verwaltungsfunktionen für Administratoren. Die User 
 7. Das System protokolliert Fehler und Ausnahmen, um eine umfassende Fehleranalyse zu ermöglichen.
 8. Das Logging-Protokoll respektiert die Datenschutzrichtlinien und zeigt nur die Informationen an, die für Administratoren relevant sind.
 9. Die Protokolldaten werden sicher gespeichert und sind vor unbefugtem Zugriff geschützt.
-10. Es besteht die Möglichkeit, Protokolldaten zu exportieren oder auszudrucken, um externe Analysen durchzuführen oder für Auditzwecke.
+
 
  _Hinweis: Die Administratorrolle hat Vollzugriff auf das Logging-Protokoll, um eine umfassende Überwachung und Analyse des Systemverhaltens sicherzustellen._
  
