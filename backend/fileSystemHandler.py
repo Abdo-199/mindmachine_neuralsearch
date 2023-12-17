@@ -48,10 +48,8 @@ class FileSystemHandler:
         return status_return
     
     def encode_and_upload(self, file_path, user):
-        # TODO: add the ocr here too, so it works also with revecorization
-
         # saves ocr file to temp directory
-        filename = file_path.split('/')[-1]
+        filename = os.path.basename(file_path)
         temp_file_path = config.temp_pdf_directory + filename
         os.makedirs(config.temp_pdf_directory, exist_ok=True)
         # open pdf with pikepdf and remove restrictions
