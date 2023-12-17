@@ -1,4 +1,3 @@
-
 # 1. Projektbeschreibung: MindMachine - Projekt der HTW Berlin
 
 Die **MindMachine** ist ein innovatives Webanwendungsprojekt, das im Rahmen des Sommersemester 2023 gestarteten Masterstudiengangs "Informatik in den Ingenieurwissenschaften" an der Hochschule für Technik und Wirtschaft (HTW) Berlin entsteht. Dieses Projekt wird von Studierenden als Teil eines Moduls entwickelt, um fortgeschrittene Informatikkenntnisse in den Ingenieurwissenschaften zu fördern.
@@ -40,7 +39,7 @@ Die Studierenden lernen verschiedene Rollen im agilen Prozess kennen und setzen 
 Die enge Zusammenarbeit zwischen der HTW Berlin und den Studierenden bei der Entwicklung der **MindMachine** spiegelt den kooperativen Ansatz des Moduls wider. Ziel ist es, innovative Lösungen für Herausforderungen in den Ingenieurwissenschaften zu schaffen und gleichzeitig sicherzustellen, dass die Studierenden bestmöglich auf ihre berufliche Zukunft vorbereitet werden.
 
 ---
-## # 2. Installation
+# 2. Installation
 
 Da es sich um eine Webanwendung handelt, ist keine lokale Installation erforderlich. Sie können einfach die [MindMachine-Website](https://mindmachine.htw-berlin.de/) besuchen und auf die entsprechenden Funktionen zugreifen.
 
@@ -49,12 +48,12 @@ Bitte beachten Sie, dass eine Internetverbindung erforderlich ist, um auf die An
 **Hinweis: Die Nutzung der MindMachine erfordert eine Verbindung zum HTW-Netzwerk.**
 
 ---
-## 3. Verweise auf detaillierte Dokumentation
+# 3. Verweise auf detaillierte Dokumentation
 
 ===Verweis auf detaillierte Dokumentation mit Direktlinks etc, wenn diese fertig gestellt ist=== #endsprint
 
 ---
-## 4. Lizenz: 
+# 4. Lizenz: 
 
 Die MindMachine-Anwendung verwendet Qdrant, eine Open-Source-Software, die unter der [Apache License 2.0](https://github.com/qdrant/qdrant/blob/master/LICENSE) veröffentlicht ist.
 
@@ -71,9 +70,9 @@ Die MindMachine-Anwendung verwendet Qdrant, eine Open-Source-Software, die unter
 Stellen Sie sicher, dass Sie die vollständigen Bedingungen der Apache License 2.0 sorgfältig überprüfen und einhalten. Bei Fragen oder Unklarheiten ist es ratsam, rechtlichen Rat einzuholen.
 
 ---
-## 5. Fehlersuche
+# 5. Fehlersuche
 
-### Probleme bei der Anmeldung
+## Probleme bei der Anmeldung
 
 1. **HTW-Account erforderlich:** Stelle sicher, dass du einen aktiven HTW-Account besitzt. Unsere Anwendung erfordert eine Anmeldung mit den HTW-Anmeldedaten.
 
@@ -81,7 +80,7 @@ Stellen Sie sicher, dass Sie die vollständigen Bedingungen der Apache License 2
 
 3. **Internetverbindung überprüfen:** Stelle sicher, dass deine Internetverbindung stabil ist.
 
-### Technische Probleme
+## Technische Probleme
 
 1. **Browser-Kompatibilität:** Die Anwendung wurde erfolgreich in den neuesten Versionen von Chrome, Firefox und Safari getestet. Überprüfe, ob du einen dieser Browser verwendest und versuche es gegebenenfalls mit einem anderen.
 
@@ -91,12 +90,12 @@ Stellen Sie sicher, dass Sie die vollständigen Bedingungen der Apache License 2
 
 4. **Pop-up-Blocker:** Deaktiviere Pop-up-Blocker, da diese möglicherweise die Anmeldung oder andere Funktionen beeinträchtigen.
 
-### Weitere Unterstützung
+## Weitere Unterstützung
 
 Wenn die oben genannten Schritte das Problem nicht lösen, zögere nicht, ===[unser Support-Team](mailto:support@example.com)=== #endsprint zu kontaktieren, um weitere Unterstützung zu erhalten.
 
 ---
-## 6. Kontakt
+ 6. Kontakt
 
 SOFTENG MemoryMachine
 memorymachine.softeng@gmail.com
@@ -106,7 +105,7 @@ Wilhelminenhofstraße 75A, 12459 Berlin
 
 
 ---
-## 7. Badges
+# 7. Badges
 
 ===**VIELLEICHT GANZ ZUM SCHLUSS MAL MACHEN***=== #endsprint 
 
@@ -119,14 +118,14 @@ Wilhelminenhofstraße 75A, 12459 Berlin
 [![Downloads](https://img.shields.io/github/downloads/username/repo/total.svg)](https://github.com/username/repo/releases)
 
 ---
-## 8. Beispiel
+# 8. Beispiel
 
 ===Ein einfaches Beispiel oder eine Schnellstartanleitung.===
 
 ===**VIELLEICHT GANZ ZUM SCHLUSS MAL MACHEN***=== #endsprint 
 
 ---
-## 9. Lizenzierung und Urheberrecht
+# 9. Lizenzierung und Urheberrecht
 
 Die MindMachine-Webanwendung unterliegt der [Apache 2.0 Lizenz](https://www.apache.org/licenses/LICENSE-2.0).
 
