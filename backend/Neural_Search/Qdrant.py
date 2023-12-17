@@ -184,4 +184,7 @@ class Qdrant:
         for file in files:
             print(os.path.join(config.document_directory, user, file['file_name']))
             file_path = os.path.join(config.document_directory, user, file['file_name'])
-            fileHandler.encode_and_upload(file_path, user)
+            try:
+              fileHandler.encode_and_upload(file_path, user)
+            except:
+               print(f"no text recognized in {file_path}")
