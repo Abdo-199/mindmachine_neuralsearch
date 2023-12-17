@@ -7,6 +7,8 @@ Creation Date: 11.11.2023
 from qdrant_client import QdrantClient, models
 from qdrant_client.http.models import Filter, FieldCondition, MatchValue
 from sentence_transformers import SentenceTransformer
+from fileSystemHandler import FileSystemHandler
+import os
 import config
 
 class Qdrant:
@@ -171,3 +173,15 @@ class Qdrant:
       ],
     ),
     )
+
+  def revectorize_all(self):
+    fileHandler = FileSystemHandler(self)
+    all_users = [d for d in os.listdir(config.document_directory) if os.path.isdir(os.path.join(config.document_directory, d))]
+    for user in all_users:
+        print(f"deleting {user}")
+        self.qdrant_client.delete_collection(user)
+        files = fileHandler.get_fs_for_user(user)
+        for file in files:
+            print(os.path.join(config.document_directory, user, file['file_name']))
+            file_path = os.path.join(config.document_directory, user, file['file_name'])
+            fileHandler.encode_and_upload(file_path, user)

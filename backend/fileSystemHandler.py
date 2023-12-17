@@ -53,15 +53,7 @@ class FileSystemHandler:
                         optimize=0,
                         invalidate_digital_signatures=True
                     )
-                    # encode pdf to vectors
-                    docVec = pdf_to_docVec(temp_file_path, self.qdClient.encoder)
-
-                    #check if there were paragraphs recognized
-                    if len(docVec.paras_vecs) <= 1 and docVec.paras_vecs[0]['paragraph'] == '':
-                        raise Exception("No paragraphs recognized")   
-                                     
-                    # save vectors to qdrant
-                    self.qdClient.add_docVec(user_id, docVec)
+                    self.encode_and_upload(file_path, user_id)
                     if os.path.exists(temp_file_path):
                         os.remove(temp_file_path)
                     status_return.append([file.filename, True])
@@ -72,6 +64,18 @@ class FileSystemHandler:
                     continue
 
         return status_return
+    
+    def encode_and_upload(self, file_path, user):
+        # TODO: add the ocr here too, so it works also with revecorization
+        # encode pdf to vectors
+        docVec = pdf_to_docVec(file_path, self.qdClient.encoder)
+
+        #check if there were paragraphs recognized
+        if len(docVec.paras_vecs) <= 1 and docVec.paras_vecs[0]['paragraph'] == '':
+            raise Exception("No paragraphs recognized")  
+        
+        # save vectors to qdrant
+        self.qdClient.add_docVec(user, docVec)
 
     def get_fs_for_user(self, user_id):
 
