@@ -96,6 +96,12 @@ class API:
             self.file_system_handler.edit_document_name(user_id, request.old_name, request.new_name)
             return True
         
+        #edit document name
+        @self.router.head("/revectorize")
+        async def revectorize():
+            self.qdClient.revectorize_all()
+            return True
+        
 
         #get used disk space
         @self.router.get("/diskusage")
