@@ -7,6 +7,8 @@ Creation Date: 11.11.2023
 from qdrant_client import QdrantClient, models
 from qdrant_client.http.models import Filter, FieldCondition, MatchValue
 from sentence_transformers import SentenceTransformer
+import sys
+sys.path.append("../")
 from fileSystemHandler import FileSystemHandler
 import os
 import config
@@ -21,7 +23,8 @@ class Qdrant:
   - qdrant_client (QdrantClient): Client for qdrant interactions.
   """
   def __init__(self, encoder = SentenceTransformer("all-MiniLM-L6-v2"),
-               qdrant_client = QdrantClient(host=config.qdrant_host, port=config.qdrant_port)):
+               qdrant_client = QdrantClient(host=config.qdrant_host, port=config.qdrant_port),
+               distance=models.Distance.DOT):
     """
     Initialize the Qdrant class.
 
@@ -34,6 +37,7 @@ class Qdrant:
     """
     self.encoder = encoder
     self.qdrant_client = qdrant_client
+    self.distance = distance
 
   def check_user(self, userName):
     """
@@ -54,7 +58,7 @@ class Qdrant:
         collection_name=userName,
         vectors_config=models.VectorParams(
             size=self.encoder.get_sentence_embedding_dimension(),
-            distance=models.Distance.COSINE,
+            distance=self.distance,
         ),
       )
       vectors_count = 0
@@ -72,24 +76,17 @@ class Qdrant:
     None
     """
     vectors_count = self.check_user(userName)
-    self.qdrant_client.upload_records(
-    collection_name=userName,
-    records=[
-        models.Record(id=vectors_count, vector=docVec.vec, payload={"isDoc":True, "name":docVec.name})
-    ])
-    vectors_count = vectors_count + 1
 
     for para in docVec.paras_vecs:
-      print(para['paragraph'])
       self.qdrant_client.upload_records(
       collection_name=userName,
       records=[
-          models.Record(id=vectors_count, vector=para['vec'], payload={"isDoc":False,"name":para['paragraph'], "source_doc":docVec.name})
+          models.Record(id=vectors_count, vector=para['vec'], payload={"doc_name":docVec.name, "passage":para['paragraph']})
       ])
       vectors_count = vectors_count + 1
 
 
-  def get_hits(self, collection_name, search_text, filter):
+  def get_hits(self, collection_name, search_text):
     """
     Get search hits from the Qdrant collection.
 
@@ -104,7 +101,6 @@ class Qdrant:
     return self.qdrant_client.search(
       collection_name= collection_name,
       query_vector= self.encoder.encode(search_text).tolist(),
-      query_filter= filter,
       limit=8,
     )
 
@@ -123,7 +119,7 @@ class Qdrant:
     score_values_indoc = []
     for hit in hits:
         # print(hit.payload, "score:", hit.score)
-        score_values_indoc.append(hit.payload["name"])
+        score_values_indoc.append(hit.payload)
         if hit.score > max_score_value:
             max_score_value = hit.score
             max_score_value_indoc = hit.payload
@@ -148,14 +144,14 @@ class Qdrant:
     dict: {"relevant_docs": relevant_doc, "relevant_paragraph": relevant_para}.
     """
 
-    docs_filter = Filter(must=[FieldCondition(key="isDoc", match=MatchValue(value=True))])
-    docs_hits = self.get_hits(collection_name, search_text, docs_filter)
-    relevant_docs = self.get_scores(docs_hits)
+    docs_hits = self.get_hits(collection_name, search_text)
+    relevant_pasages = self.get_scores(docs_hits)
 
-    paras_filter = Filter(must=[FieldCondition(key="source_doc", match=MatchValue(value=relevant_docs[0]))])
-    paras_hits = self.get_hits(collection_name, search_text, paras_filter)
-    relevant_para = self.get_scores(paras_hits)
-    return {"relevant_docs": relevant_docs[:4], "relevant_paragraphs": relevant_para[:4]}
+
+    # paras_filter = Filter(must=[FieldCondition(key="source_doc", match=MatchValue(value=relevant_docs[0]))])
+    # paras_hits = self.get_hits(collection_name, search_text, paras_filter)
+    # relevant_para = self.get_scores(paras_hits)
+    return relevant_pasages[:4]
   
   def delete_doc(self, collection_name, doc_name):
     self.qdrant_client.delete(

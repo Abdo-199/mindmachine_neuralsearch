@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from Qdrant import Qdrant
 from PdfReader import pdf_to_docVec
+from nltk.corpus import stopwords
 
 
 def find_pdf_files(directory):
@@ -31,7 +32,7 @@ def find_pdf_files(directory):
     return pdf_files
 
 
-def encode_dataset(name, encoder, path):
+def encode_dataset(test_name, path,encoder, distance, chunk_size, remove_stop_words, overlap):
     """
     Encodes PDF documents in a given directory using a specified encoder and adds them to the Qdrant index.
 
@@ -40,10 +41,10 @@ def encode_dataset(name, encoder, path):
         encoder: The encoder used to convert PDFs to document vectors.
         path (str): The path to the directory containing PDF files.
     """
-    qdClient = Qdrant(encoder)
+    qdClient = Qdrant(encoder = encoder, distance=distance)
     pdf_paths = find_pdf_files(path)
     for pdf in pdf_paths:
-        qdClient.add_docVec(name, pdf_to_docVec(pdf, encoder))
+        qdClient.add_docVec(test_name, pdf_to_docVec(pdf, encoder, chunk_size, remove_stop_words, overlap))
         print(pdf)
 
 
@@ -133,23 +134,34 @@ def is_correct_answer(model_answer, actual_answer):
 
     return similarity_score, similarity_score >= threshold
 
+def remove_stopwords_full(text):
+    words = text.split(' ')
 
-def get_model_answer(question, name, client):
-    """
-    Retrieves the model's answer for a given question using the Qdrant client.
+    english_stopwords = set(stopwords.words('english'))
+    german_stopwords = set(stopwords.words('german'))
 
-    Parameters:
-        question (str): The input question.
-        name (str): The name of the dataset.
-        client: The Qdrant client for searching.
+    filtered_words = [word.lower() for word in words if word.lower() not in (english_stopwords | german_stopwords)]
 
-    Returns:
-        dict: A dictionary containing the model's answer including relevant paragraphs and documents.
-    """
-    return client.search(name, question)
+    filtered_text = ' '.join(filtered_words)
+
+    return filtered_text
+
+# def get_model_answer(question, name, client):
+#     """
+#     Retrieves the model's answer for a given question using the Qdrant client.
+
+#     Parameters:
+#         question (str): The input question.
+#         name (str): The name of the dataset.
+#         client: The Qdrant client for searching.
+
+#     Returns:
+#         dict: A dictionary containing the model's answer including relevant paragraphs and documents.
+#     """
+#     return client.search(name, remove_stopwords_full(question))
 
 
-def test_language_model(test_name, dataset_path):
+def test_language_model(test_name, dataset_path, encder, remove_stop_words_q=True):
     """
     Tests the language model on a dataset and calculates accuracy per language and category.
 
@@ -160,12 +172,14 @@ def test_language_model(test_name, dataset_path):
     Returns:
         dict: A dictionary containing accuracy results per language and category.
     """
-    qdClient = Qdrant()
+    qdClient = Qdrant(encoder=encder)
     dataset = read_dataset(dataset_path)
     results = {}
+    avg_acc = 0
 
     for language in dataset:
         results[language] = {}
+        acc_per_language = 0
         for category in dataset[language]:
             correct_count_para = 0
             correct_count_doc = 0
@@ -173,20 +187,25 @@ def test_language_model(test_name, dataset_path):
 
             for pdf in dataset[language][category]:
                 for qa in dataset[language][category][pdf]:
-                    model_answer = get_model_answer(qa['Question'], test_name, qdClient)
+                    question = qa['Question']
+                    if remove_stop_words_q:
+                        question = remove_stopwords_full(question)
 
-                    similarity_score_para, is_partial_match_para = is_correct_answer(
-                        model_answer['relevant_paragraphs'][0], qa['Answer'])
+                    model_answer = qdClient.search(test_name, question)
 
-                    if is_partial_match_para:
-                        correct_count_para += 1
-                    if (model_answer['relevant_docs'][0].split('.')[0] == pdf):
+                    # similarity_score_para, is_partial_match_para = is_correct_answer(
+                    #     model_answer['relevant_paragraphs'][0], qa['Answer'])
+
+                    # if is_partial_match_para:
+                    #     correct_count_para += 1
+                    if (model_answer[0]['doc_name'].split('.')[0] == pdf):
                         correct_count_doc += 1
                     total_questions += 1
 
             if total_questions > 0:
                 accuracy_para = correct_count_para / total_questions
                 accuracy_doc = correct_count_doc / total_questions
+                acc_per_language += accuracy_doc
                 results[language][category] = {
                     'accuracy_para': accuracy_para,
                     'accuracy_doc': accuracy_doc,
@@ -200,11 +219,20 @@ def test_language_model(test_name, dataset_path):
                     'total_questions': 0,
                     'correct_answers_para': 0
                 }
+        if language == 'English':
+            avg_english = acc_per_language / len(dataset[language])
+        else:
+            avg_german = acc_per_language / len(dataset[language])
+
+    avg_acc = (avg_english + avg_german) / 2
+    results['avg_acc'] = avg_acc
+    results['avg_english'] = avg_english
+    results['avg_german'] = avg_german
 
     return results
 
 
-def display_acc_per_lang(test_results, language, accuracy):
+def display_acc_per_lang(test_results, accuracy):
     """
     Displays a bar plot of accuracy per category for a given language.
 
@@ -213,17 +241,29 @@ def display_acc_per_lang(test_results, language, accuracy):
         language (str): The language for which to display accuracy.
         accuracy (str): The type of accuracy to display (e.g., 'accuracy_para' or 'accuracy_doc').
     """
-    # Plotting accuracy per category for a given language
-    categories = list(test_results[language].keys())
-    accuracies = [test_results[language][category][accuracy] for category in categories]
+    plt.figure(figsize=(12, 4))
+    plt.title(f"avg accuracy: {test_results['avg_acc']}")
 
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x=categories, y=accuracies)
-    plt.title(f'Accuracy per Category in {language}')
+    # Plotting accuracy per category for a given language
+    categories_eng = list(test_results['English'].keys())
+    accuracies_eng = [test_results['English'][category][accuracy] for category in categories_eng]
+
+    plt.subplot(1, 2, 1)
+    sns.barplot(x=categories_eng, y=accuracies_eng)
+    plt.title(f"avg acc in English: {test_results['avg_english']}")
     plt.ylabel('Accuracy')
     plt.xlabel('Category')
     plt.xticks(rotation=45)
-    plt.show()
+
+    categories_ger = list(test_results['German'].keys())
+    accuracies_ger = [test_results['German'][category][accuracy] for category in categories_ger]
+
+    plt.subplot(1, 2, 2)
+    sns.barplot(x=categories_ger, y=accuracies_ger)
+    plt.title(f"avg acc in German: {test_results['avg_german']}")
+    plt.ylabel('Accuracy')
+    plt.xlabel('Category')
+    plt.xticks(rotation=45)
 
 # Example usage
 # dataset_path = '..\\Dataset\\PDFS'  
