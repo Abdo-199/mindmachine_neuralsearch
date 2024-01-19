@@ -3,6 +3,7 @@ import RenameFileModal from "../Others/RenameFileModal";
 import DeleteFileModal from "../Others/DeleteFileModal";
 import "../../styles/FileInformation/FileInformation.css";
 
+//Open, rename or delete Card for a file
 const FileOptions = ({
   filename,
   SetThisFile,
@@ -19,6 +20,7 @@ const FileOptions = ({
   ModalHandlerDeleteConfirm: any;
 }) => {
 
+  //checks, if a filename contains forbidden characters
   function checkFilename(
     inputString: string,
     forbiddenCharacters: RegExp
@@ -28,12 +30,9 @@ const FileOptions = ({
 
   const [newFilename, SetNewFilename] = useState("");
   const [isFileOpened, setIsFileOpened] = useState<boolean>(false);
-
   const [pdfURL, setPDFURL] = useState<string>("");
-
   const [modalHandlerDataChange, setModalHandlerDataChange] = useState(false);
   const [modalHandlerDataDelete, setModalHandlerDataDelete] = useState(false);
-
   const [isConfirmed, SetIsConfirmed] = useState(false);
 
   useEffect(() => {
@@ -102,11 +101,13 @@ const FileOptions = ({
 
   // retrieve document from backend
   const API_GetDocument = async () => {
-    const user_id = localStorage.getItem("userID");
-
-    const fetchString = `${process.env.REACT_APP_production_address}/document?user_id=${user_id}&document_name=${filename}`;
+    const fetchString = `${process.env.REACT_APP_production_address}/document?document_name=${filename}`;
     return await fetch(fetchString, {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+      },
     }).then(async (res) => {
       const blob = await res.blob();
       const pdfUrl = URL.createObjectURL(blob);
@@ -117,17 +118,15 @@ const FileOptions = ({
   // send delete request to backend
   const API_DeleteDocument = async () => {
     return await fetch(
-      `${process.env.REACT_APP_production_address}/deleteDocument/${localStorage.getItem(
-        "userID"
-      )}/${filename}`,
+      `${process.env.REACT_APP_production_address}/deleteDocument/${filename}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem("token")}`,
         },
       }
     )
-      .then((res) => res.json())
       .then((response) => {
         SetDocRows(docRows.filter((file) => file.file_name !== filename));
       });
@@ -136,18 +135,16 @@ const FileOptions = ({
   // send rename request to backend
   const API_EditDocumentName = async () => {
     return await fetch(
-      `${process.env.REACT_APP_production_address}/editDocumentName/${localStorage.getItem(
-        "userID"
-      )}`,
+      `${process.env.REACT_APP_production_address}/editDocumentName`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ old_name: filename, new_name: newFilename }),
       }
     )
-      .then((res) => res.json())
       .then((_response) => {
         const nextList = docRows.map((item) => {
           SetNewFilename("");
@@ -159,6 +156,8 @@ const FileOptions = ({
             return item;
           }
         });
+
+        //refresh the docRows with the new named file
         SetDocRows(nextList);
       });
   };
