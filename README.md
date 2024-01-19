@@ -1,3 +1,4 @@
+# Dieses Repository ist ein sub Repo von dem Projekt MindMachine, um die Notebooks zu behalten 
 # 1. Projektbeschreibung: MindMachine - Projekt der HTW Berlin
 
 Die **MindMachine** ist ein innovatives Webanwendungsprojekt, das im Rahmen des Sommersemester 2023 gestarteten Masterstudiengangs "Informatik in den Ingenieurwissenschaften" an der Hochschule für Technik und Wirtschaft (HTW) Berlin entsteht. Dieses Projekt wird von Studierenden als Teil eines Moduls entwickelt, um fortgeschrittene Informatikkenntnisse in den Ingenieurwissenschaften zu fördern.
