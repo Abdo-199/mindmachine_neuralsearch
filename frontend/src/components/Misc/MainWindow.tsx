@@ -10,6 +10,7 @@ import AdminPanel from '../AdminPanel/AdminPanel';
 import FileInformationWindow from '../FileInformation/FileInformationWindow'
 import { useNavigate } from "react-router-dom";
 import { SearchResultProvider } from '../SearchResult/SearchResultContext';
+import LogWindow from '../AdminPanel/LogWindow'
 
 interface MainWindowProps {
   content: string;
@@ -19,53 +20,59 @@ const MainWindow: React.FC<MainWindowProps> = ({ content }) => {
 
   const navigate = useNavigate();
 
-  // Liste aller Dateien (noch nicht user-spezifisch)
+  //list of all files
   const [docRows, SetDocRows] = useState<any[]>([]);
-  const [searchResult, setSearchResult] = useState({});
 
+  //check if user is logged in
   useEffect(() => {
     if (localStorage.getItem("userID") == null || localStorage.getItem("isAdmin") == null) {
       navigate("/")
     }
   }, [])
 
-const GetFileStructure = async () => {
-  return await fetch(`${process.env.REACT_APP_production_address}/filestructure/${localStorage.getItem("userID")}`, {
-    method: 'GET',
-    mode: "cors",
-    cache: "no-cache",
-  })
-    .then(res => res.json())
-    .then(response => {
-      SetDocRows(response)
+  //gets from the backend all files
+  const GetFileStructure = async () => {
+    return await fetch(`${process.env.REACT_APP_production_address}/filestructure`, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+      },
+      mode: "cors",
+      cache: "no-cache",
     })
-}
+      .then(res => res.json())
+      .then(response => {
+        SetDocRows(response)
+      })
+  }
 
-//Prüfe, was angezeigt werden soll
-const componentMap: { [key: string]: React.ReactElement } = {
-  "HomeWindow": <HomeWindow docRows={docRows} SetDocRows={SetDocRows} GetFileStructure={GetFileStructure}/>,
-  "LegalNotice": <LegalNotice />,
-  "SearchHistory": <SearchHistory />,
-  "SearchResult": <SearchResult />,
-  "AdminPanel": <AdminPanel />,
-  "FileInformation": <FileInformationWindow docRows={docRows} SetDocRows={SetDocRows} />,
-};
+  //Check what should be displayed
+  const componentMap: { [key: string]: React.ReactElement } = {
+    "HomeWindow": <HomeWindow docRows={docRows} SetDocRows={SetDocRows} GetFileStructure={GetFileStructure} />,
+    "LegalNotice": <LegalNotice />,
+    "SearchHistory": <SearchHistory />,
+    "SearchResult": <SearchResult />,
+    "AdminPanel": <AdminPanel />,
+    "LogWindow": <LogWindow />,
+    "FileInformation": <FileInformationWindow docRows={docRows} SetDocRows={SetDocRows} />,
+  };
 
-const toRenderContent = componentMap[content] || <div>Component not found</div>;
+  const toRenderContent = componentMap[content] || <div>Component not found</div>;
 
-return (
-  <div id="windowWrapper">
-    <div id="mainWindow-container">
-      <Header></Header>
-      <div id="mainContent">
-        <SearchResultProvider>
-          {toRenderContent}
-        </SearchResultProvider>
+  return (
+    <div id="windowWrapper">
+      <div id="mainWindow-container">
+        <Header></Header>
+        <div id="mainContent">
+          <SearchResultProvider>
+            {toRenderContent}
+          </SearchResultProvider>
+        </div>
+        <Footer></Footer>
       </div>
-      <Footer></Footer>
     </div>
-  </div>
-)
-    }
+  )
+}
 
 export default MainWindow
